@@ -1,35 +1,50 @@
-# .pre-commit-config.yaml
 repos:
+  # Common hooks for various checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1  # Use the latest stable version
+    rev: v4.0.1
     hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-json
-      - id: detect-private-key
-      - id: markdown-spellcheck
-        args: [ --ignore-numbers, --check-filenames, --check-hidden, --check-acronyms, --check-case, --check-urls ]
-        files: '\.md$'
+      - id: trailing-whitespace  # Removes trailing whitespace from files
+      - id: end-of-file-fixer    # Ensures a newline at the end of each file
+      - id: check-yaml           # Validates YAML files syntax
+      - id: check-json           # Validates JSON files syntax
+      - id: detect-private-key   # Searches for private keys in the repository
+
+  # Code formatting with Black
   - repo: https://github.com/psf/black
-    rev: 23.1.0  # Use the latest stable version
+    rev: 24.4.2
     hooks:
-      - id: black # code formatting
+      - id: black
+
+  # Linting with Flake8 and complexity checks with McCabe
   - repo: https://github.com/PyCQA/flake8
-    rev: v6.0.0  # Use the latest stable version
+    rev: 7.0.0
     hooks:
-      - id: flake8 # linting
+      - id: flake8
         additional_dependencies:
-          - flake8-mccabe # Adding McCabe for complexity checks
+          - flake8-mccabe
+
+  # Static type checking with Mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.910  # Use the latest stable version
+    rev: v1.10.0
     hooks:
-      - id: mypy # static type checking
+      - id: mypy
+
+  # Linting with Pylint
   - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v2.12.2  # Use the latest stable version
+    rev: v3.0.0a5
     hooks:
-      - id: pylint # linting
+      - id: pylint
+
+  # Commit message formatting with Commitlint
   - repo: https://github.com/conventional-changelog/commitlint
-    rev: v11.0.0  # Use the latest stable version
+    rev: v11.0.0
     hooks:
-      - id: commitlint # commit message formatting
+      - id: commitlint
+
+  # Spellchecking Markdown files with Yaspeller
+  - repo: https://github.com/pre-commit/mirrors-yaspeller
+    rev: v1.0.1
+    hooks:
+      - id: yaspeller
+        args: [ '--ignore-links', '--ignore-camelcase' ]
+        files: '\.md$'
