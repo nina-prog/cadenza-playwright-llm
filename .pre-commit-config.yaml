@@ -1,0 +1,35 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1  # Use the latest stable version
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: detect-private-key
+      - id: markdown-spellcheck
+        args: [ --ignore-numbers, --check-filenames, --check-hidden, --check-acronyms, --check-case, --check-urls ]
+        files: '\.md$'
+  - repo: https://github.com/psf/black
+    rev: 23.1.0  # Use the latest stable version
+    hooks:
+      - id: black # code formatting
+  - repo: https://github.com/PyCQA/flake8
+    rev: v6.0.0  # Use the latest stable version
+    hooks:
+      - id: flake8 # linting
+        additional_dependencies:
+          - flake8-mccabe # Adding McCabe for complexity checks
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.910  # Use the latest stable version
+    hooks:
+      - id: mypy # static type checking
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: v2.12.2  # Use the latest stable version
+    hooks:
+      - id: pylint # linting
+  - repo: https://github.com/conventional-changelog/commitlint
+    rev: v11.0.0  # Use the latest stable version
+    hooks:
+      - id: commitlint # commit message formatting
