@@ -8,13 +8,11 @@ repos:
       - id: check-yaml           # Validates YAML files syntax
       - id: check-json           # Validates JSON files syntax
       - id: detect-private-key   # Searches for private keys in the repository
-
   # Code formatting with Black
   - repo: https://github.com/psf/black
     rev: 24.4.2
     hooks:
       - id: black
-
   # Linting with Flake8 and complexity checks with McCabe
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
@@ -22,25 +20,21 @@ repos:
       - id: flake8
         additional_dependencies:
           - flake8-mccabe
-
   # Static type checking with Mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.0
     hooks:
       - id: mypy
-
   # Linting with Pylint
   - repo: https://github.com/pre-commit/mirrors-pylint
     rev: v3.0.0a5
     hooks:
       - id: pylint
-
   # Commit message formatting with Commitlint
   - repo: https://github.com/conventional-changelog/commitlint
     rev: v11.0.0
     hooks:
       - id: commitlint
-
   # Spellchecking Markdown files with Yaspeller
   - repo: https://github.com/pre-commit/mirrors-yaspeller
     rev: v1.0.1
