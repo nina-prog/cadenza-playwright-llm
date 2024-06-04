@@ -35,10 +35,8 @@ repos:
     rev: v11.0.0
     hooks:
       - id: commitlint
-  # Spellchecking Markdown files with Yaspeller
-  - repo: https://github.com/pre-commit/mirrors-yaspeller
-    rev: v1.0.1
+  # Spellchecking Markdown files with cspell
+  - repo: https://github.com/streetsidesoftware/cspell-cli
+    rev: v8.8.2
     hooks:
-      - id: yaspeller
-        args: [ '--ignore-links', '--ignore-camelcase' ]
-        files: '\.md$'
+      - id: cspell
