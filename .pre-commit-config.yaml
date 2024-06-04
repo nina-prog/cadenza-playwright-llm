@@ -1,7 +1,7 @@
 repos:
   # Common hooks for various checks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.6.0
     hooks:
       - id: trailing-whitespace  # Removes trailing whitespace from files
       - id: end-of-file-fixer    # Ensures a newline at the end of each file
@@ -25,11 +25,6 @@ repos:
     rev: v1.10.0
     hooks:
       - id: mypy
-  # Linting with Pylint
-  - repo: https://github.com/pre-commit/mirrors-pylint
-    rev: v3.0.0a5
-    hooks:
-      - id: pylint
   # Commit message formatting with Commitlint
   - repo: https://github.com/conventional-changelog/commitlint
     rev: v11.0.0
