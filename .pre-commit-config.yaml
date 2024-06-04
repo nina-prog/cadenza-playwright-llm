@@ -14,13 +14,6 @@ repos:
     rev: 24.4.2
     hooks:
       - id: black-jupyter
-  # Linting with Flake8 and complexity checks with McCabe
-  - repo: https://github.com/PyCQA/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
-        additional_dependencies:
-          - flake8-mccabe
   # Static type checking with Mypy
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.0
