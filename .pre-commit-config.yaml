@@ -8,6 +8,7 @@ repos:
       - id: check-yaml           # Validates YAML files syntax
       - id: check-json           # Validates JSON files syntax
       - id: detect-private-key   # Searches for private keys in the repository
+      - id: check-added-large-files  # Prevents large files from being added to the repository
   # Code formatting with Black
   - repo: https://github.com/psf/black
     rev: 24.4.2
@@ -25,11 +26,6 @@ repos:
     rev: v1.10.0
     hooks:
       - id: mypy
-  # Commit message formatting with Commitlint
-  - repo: https://github.com/conventional-changelog/commitlint
-    rev: v11.0.0
-    hooks:
-      - id: commitlint
   # Spellchecking Markdown files with cspell
   - repo: https://github.com/streetsidesoftware/cspell-cli
     rev: v8.8.2
