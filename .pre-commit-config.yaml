@@ -9,11 +9,16 @@ repos:
       - id: check-json           # Validates JSON files syntax
       - id: detect-private-key   # Searches for private keys in the repository
       - id: check-added-large-files  # Prevents large files from being added to the repository
-  # Code formatting with Black
-  - repo: https://github.com/psf/black
+  # Code formatting with Black Jupyter
+  - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 24.4.2
     hooks:
-      - id: black
+      - id: black-jupyter
+        # It is recommended to specify the latest version of Python
+        # supported by your project here, or alternatively use
+        # pre-commit's default_language_version, see
+        # https://pre-commit.com/#top_level-default_language_version
+        language_version: python3.10
   # Linting with Flake8 and complexity checks with McCabe
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
