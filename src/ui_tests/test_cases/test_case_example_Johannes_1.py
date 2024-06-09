@@ -11,6 +11,6 @@ def test_load_cadenza_website_and_find_Willkommen_bei_disy_Cadenza_text_and_make
         time.sleep(3)
         page.screenshot(path="temp_images/example.png")
 
-        # Expect a title "to contain" a substring.
+        # Expect the website "to contain" a substring.
         expect(page.get_by_text("Willkommen bei disy Cadenza")).to_be_visible()
         browser.close()
