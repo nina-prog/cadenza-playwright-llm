@@ -1,0 +1,710 @@
+ Id, Name, Attachments,Attachments NEU, Description,Description NEU, Feature Version,Feature Version NEU, Module,Module NEU, Precondition,Precondition NEU, Repository,Repository NEU, Requirements,Requirements NEU, Test Steps,Test Steps NEU
+TC-5921,Sicht duplizieren (Tabelle),,,,,7.11,7.11,MD-2405 Sichten verändern,MD-2405 Sichten verändern,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+2) Klicke auf den 3-Punkte-Button innerhalb der Tabellen-Sicht ""Collection Automobile""
+Expected result: Kontextmenü erscheint mit den Optionen:
+
+- Duplizieren
+
+- In Arbeitsblatt duplizieren
+
+- Exportieren
+
+- Designer öffnen
+
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+
+Die Sicht ist dupliziert.
+
+Die duplizierte Sicht erscheint neben der original Sicht.
+
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Öffnen der Tabellen-Sicht ""Messstellenliste"" über die Werkzeugliste der Arbeitsmappe.
+Expected result: Die Tabelle ""Messstelleninformationen"" wird angezeigt, der Analysekontext ist sichtbar.
+
+3) Klicke auf den 3-Punkte-Button innerhalb der Tabellen-Sicht ""Messstelleninformationen""
+Expected result: Kontextmenü erscheint mit den Optionen:
+- Duplizieren
+- In Arbeitsblatt duplizieren
+- Exportieren
+- Designer öffnen
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich. Die Sicht ist dupliziert.
+Die duplizierte Sicht erscheint neben der Original-Sicht.
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht."
+TC-5941,Neue Arbeitsmappe erstellen,,,,,7.11,7.11,MD-4912 neue Arbeitsmappe erstellen,MD-4912 neue Arbeitsmappe erstellen,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke im Navigator auf ""Arbeitsmappe erstellen"" und wähle Repository ""Gewaesser"".
+Expected result: Eine leere Arbeitsmappe ist erstellt und eine leere Ansicht geöffnet. Datenmanager und Designer sind eingeblendet.","1) Klicke im Navigator auf das Buch-Symbol  ""Neue Arbeitsmappe"" und wähle Repository ""Gewaesser"".
+Expected result: Eine leere Arbeitsmappe wird erstellt und eine leere Ansicht geöffnet. Datenmanager und Designer sind eingeblendet."
+TC-5948,Arbeitsmappe löschen,,,,,7.11,7.11,MD-3366 Allgemein Arbeitsmappe,MD-3366 Allgemein Arbeitsmappe,"Cadenza Web installiert und gestartet
+
+Eine beliebige Arbeitsmappe die gelöscht werden kann ist erstellt.","Cadenza Web installiert und gestartet
+
+Eine beliebige Arbeitsmappe, die gelöscht werden kann, ist erstellt.",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne den Navigator undKlicke auf die drei Punkte für weitere Aktionen.
+Expected result: Der Dialog für weitere Aktionen ist geöffnet.
+2) Klicke auf ""Löschen"".
+Expected result: Der Dialog zum Löschen ist geöffnet, der Nutzer wird gefragt ob er wirklich löschen möchte.
+3) Klicke auf ""Löschen"".
+Expected result: Die Arbeitsmappe ist nicht mehr sichtbar, die Startseite von Cadenza geöffnet.
+4) Öffne den Navigator und scrolle zum vorherigen Ort der gelöschten Arbeitsmappe.
+Expected result: Die Arbeitsmappe ist nicht mehr sichtbar.","1) Öffne den Navigator, öffne einen Ordner mit einer Arbeitsmappe und klicke neben dem Namen der Arbeitsmappe  auf die drei Punkte für weitere Aktionen.
+Expected result: Der Dialog für weitere Aktionen ist geöffnet.
+
+2) Klicke auf ""Löschen"".
+Expected result: Der Dialog zum Löschen ist geöffnet, der Nutzer wird gefragt ob er wirklich löschen möchte.
+
+3) Klicke auf ""Arbeitsmappe löschen"".
+Expected result: Die Arbeitsmappe ist nicht mehr sichtbar, die Startseite von Cadenza geöffnet.
+
+4) Öffne den Navigator und scrolle zum vorherigen Ort der gelöschten Arbeitsmappe.
+Expected result: Die Arbeitsmappe ist nicht mehr sichtbar."
+TC-5953,Arbeitsblatt löschen,,,,,7.11,7.11,MD-3477 Löschen ,MD-3477 Löschen ,Workbook mit einem oder mehreren Arbeitsblättern ist geöffnet,Arbeitsmappe mit einem oder mehreren Arbeitsblättern ist geöffnet,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke auf Den ""Arbeitsblatt 1"" button.
+Expected result: Fenster öffnet sich.
+2) Klicke auf ""Neues Arbeitsblatt""
+Expected result: Fenster zum bennen des Arbeitsblattes öffnet sich.
+3) Klicke auf ""Hinzufügen"".
+Expected result: Das neue Arbeitsblatt wird angelegt.
+4) Klicke auf den ""Arbeitsblatt 2"" button und danach auf ""Arbeitsblätter verwalten"".
+Expected result: ""Manage worksheets"" Fenster öffnet sich.
+5) Gehe mit der Maus auf das Arbeitsblatt was nicht gerade geöffnet ist.
+Expected result: Die Spalte wird grau hervorgehoben, ein Stift und Mülleimer Symbol erscheint.
+6) Klicke auf den Mülleimer button.
+Expected result: Das ausgewählte Arbeitsblatt wird gelöscht.
+","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Klicke auf ""Informationen zur Arbeitsmappe"" in der Navigatorleiste.
+Expected result: Fenster öffnet sich.
+
+3) Klicke auf ""Neues Arbeitsblatt""
+Expected result: Fenster ""Arbeitsblatt hinzufügen"" zum Benennen des Arbeitsblattes öffnet sich.
+
+4) Klicke auf ""Hinzufügen"".
+Expected result: Das neue Arbeitsblatt wird angelegt.
+
+4) Klicke auf den Namen des gerade angelegten Arbeitsblatts in der Navigatorleiste und danach ganz unten auf ""Arbeitsblätter verwalten"".
+Expected result: Fenster ""Arbeitsmappe verwalten"" öffnet sich.
+
+5) Gehe mit der Maus auf ein Arbeitsblatt was nicht gerade geöffnet ist.
+Expected result: Die Spalte wird grau hervorgehoben, ein Stift und Mülleimer-Symbol erscheint.
+
+6) Klicke auf das Mülleimer-Symbol.
+Expected result: Das ausgewählte Arbeitsblatt wird gelöscht.
+"
+TC-6143,Diagramm-Sicht duplizieren,,,,,7.11,7.11,MD-2494 Sicht verwalten,MD-2494 Sicht verwalten,"
+","
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+2) Klicke auf den 3-Punkte-Button innerhalb der Diagramm-Sicht ""Collection Automobile: Registered nach Country Name""
+Expected result: Kontextmenü erscheint mit den Optionen:
+
+- Duplizieren
+
+- In Arbeitsblatt duplizieren
+
+- Exportieren
+
+- Designer öffnen
+
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+
+Die Sicht ist dupliziert.
+
+Die duplizierte Sicht erscheint neben der original Sicht.
+
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Öffne das Arbeitsblatts ""Häufigkeit der Messungen"" über die Navigatorleiste
+Expected result: Das Tabellenblatt angezeigt, der Analysekontext ist sichtbar.
+
+3) Klicke auf die Diagramm-Sicht ""Anzahl der Messungen pro Jahr"" 
+Expected result: Das Diagramm wird farblich hervorgehoben
+
+4) Klicke auf den 3-Punkte-Button innerhalb der Diagramm-Sicht ""Anzahl der Messungen pro Jahr""
+Expected result: Kontextmenü erscheint mit den Optionen:
+- Duplizieren
+- In Arbeitsblatt duplizieren
+- Designer öffnen
+- Löschen
+
+5) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+Die Sicht ist dupliziert. Die duplizierte Sicht erscheint neben der original Sicht.
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht"
+TC-6157,Indikator-Sicht duplizieren,,,,,,,MD-2503 Sicht verwalten,MD-2503 Sicht verwalten,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+2) Klicke auf den 3-Punkte-Button innerhalb der Indikator-Sicht ""Collection Automobile""
+Expected result: Kontextmenü erscheint mit den Optionen:
+
+- Duplizieren
+
+- In Arbeitsblatt duplizieren
+
+- Designer öffnen
+
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+
+Die Sicht ist dupliziert.
+
+Die duplizierte Sicht erscheint neben der original Sicht.
+
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Öffne das Arbeitsblatts ""Häufigkeit der Messungen"" über die Navigatorleiste
+Expected result: Das Arbeitsblatt wird angezeigt.
+
+3) Klicke auf die Indikator-Sicht ""402 611 Messungen gesamt"" 
+Expected result: Der Indikator wird farblich hervorgehoben
+
+4) Klicke auf den 3-Punkte-Button innerhalb der Indikator-Sicht ""402 611 Messungen gesamt""
+Expected result: Kontextmenü erscheint mit den Optionen:
+- Maximieren
+- Duplizieren
+- In Arbeitsblatt duplizieren
+- Designer öffnen
+- Löschen
+
+5) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+Die Sicht ist dupliziert. Die duplizierte Sicht erscheint an einem anderen Platz im Arbeitsblatt
+Beide Sichten haben die gleiche Größe."
+TC-6362,[e2e] Neue Sicht im Workbook erstellen - Text,,,,,7.11,7.11,MD-2611 Text,MD-2611 Text,Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>,Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigtt.
+2) Klicke oben rechts auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+3) Klicke auf ""Text""
+Expected result: Eine Textsicht wird dem Arbeitsblatt des Workbooks hinzugefügt","1) Öffne die importierte Arbeitsmappe oder alternativ die Arbeitsmappe ""Gewässergüte"" im Ordner ""Gewässergüte"".
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt.
+
+2) Klicke oben rechts auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet 
+
+3) Klicke auf ""Text"" unter ""Statische Sicht""
+Expected result: Eine Textsicht wird dem Arbeitsblatt des Workbooks hinzugefügt"
+TC-6372,Datenmanager anzeigen/ausblenden,,,,,7.11,7.11,MD-3568 Allgemein,MD-3568 Allgemein,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Datenmanager ist sichtbar.
+2) Klicke auf X im Datenmanager.
+Expected result: Der Datenmanager wird ausgeblendet.
+3) Klicke auf das Datenmanagersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Datenmanager wird eingeblendet.
+
+4) Klicke auf das Datenmanagersymbol in der Werkzeugleiste der Arbeitsmappe.
+
+Expected result: Der Datenmanager wird ausgeblendet.
+","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Öffne das Arbeitsblatts ""Häufigkeit der Messungen"" über die Navigatorleiste
+Expected result: Das Arbeitsblatt angezeigt
+
+3) Klicke auf das Datenmanagersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Datenmanager wird eingeblendet.
+
+4) Klicke auf X im Datenmanager.
+Expected result: Der Datenmanager wird ausgeblendet.
+
+5) Klicke erneut auf das Datenmanagersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Datenmanager wird eingeblendet.
+
+6) Klicke auf das Datenmanagersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Datenmanager wird eingeblendet.
+"
+TC-6381,Analysekontext anzeigen/ausblenden,,,,,7.11,7.11,MD-4755 Geöffnet/Geschlossen Status,MD-4755 Geöffnet/Geschlossen Status,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+2) Klicke auf das Analysekontextsymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Analysekontext wird eingeblendet.
+3) Klicke auf X im Analysekontext.
+
+Expected result: Der Analysekontext wird ausgeblendet.
+4) Klicke auf das Analysekontextsymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Analysekontext wird eingeblendet.","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Klicke auf das Analysekontextsymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Analysekontext wird eingeblendet.
+
+3) Klicke auf X im Analysekontext.
+Expected result: Der Analysekontext wird ausgeblendet.
+
+4) Klicke erneut auf das Analysekontextsymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Analysekontext wird eingeblendet.
+
+5) Klicke auf das Analysekontextsymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Analysekontext wird ausgeblendet"
+TC-6492,Designer einblenden/ausblenden,,,,,7.11,7.11,MD-4670 Allgemein,MD-4670 Allgemein,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+
+Expected result: Die Arbeitsmappe wird geöffnet, der Designer ist sichtbar.
+
+2) Klicke auf X im Designer.
+Expected result: Der Designer wird ausgeblendet.
+3) Klicke auf das Designersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Designer wird eingeblendet.
+4) Klicke auf das Designersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Designer wird ausgeblendet.
+","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"" und klicke auf eine beliebige Sicht.
+Expected result: Die Arbeitsmappe wird geöffnet, die Sicht wird farblich hervorgehoben.
+
+2) Klicke auf das Designersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Designer wird eingeblendet.
+
+3) Klicke auf X im Designer.
+Expected result: Der Designer wird ausgeblendet.
+
+4) Klicke erneut auf das Designersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Designer wird eingeblendet.
+
+5) Klicke auf das Designersymbol in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Der Designer wird ausgeblendet.
+"
+TC-9058,Neues Arbeitsblatt erstellen,,,,,8.2,8.2,MD-3475 Allgemein Arbeitsblätter,MD-3475 Allgemein Arbeitsblätter,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Cadenza Web: Klicke auf ""Arbeitsmappe erstellen"".
+Expected result: Eine leere Arbeitsmappe ist erstellt und eine leere Sicht geöffnet.
+2) Klicke auf Den ""Arbeitsblatt 1"" button.
+Expected result: Fenster öffnet sich.
+3) Klicke auf ""Neues Arbeitsblatt"".
+
+ 
+Expected result: Fenster zum benennen des Arbeitsblattes öffnet sich.
+
+ 
+4) Gebe einen Namen ein und Klicke auf ""Hinzufügen"".
+Expected result: Das neue Arbeitsblatt wird angezeigt. Oben wird jetzt der Name des neuen Arbeitsblattes angezeigt. ","1) Klicke im Navigator auf das Buch-Symbol  ""Neue Arbeitsmappe"" und wähle Repository ""Gewaesser"".
+Expected result: Eine leere Arbeitsmappe ist erstellt und eine leere Ansicht geöffnet. Datenmanager und Designer sind eingeblendet.
+
+2) Klicke auf ""Neues Arbeitsblatt"" in der Werkzeugleiste der Arbeitsmappe.
+Expected result: Fenster zum Benennen des Arbeitsblattes öffnet sich.
+
+4) Gebe einen Namen ein und Klicke auf ""Hinzufügen"".
+Expected result: Das neue Arbeitsblatt wird angezeigt. Oben wird jetzt der Name des neuen Arbeitsblattes angezeigt. "
+TC-12604,[e2e] Arbeitsmappe importieren aus alter Version (.zip),e2e_Testmappe_9.2.zip,Testmappe_Ladesaeulen.zip,Importieren von einer Arbeitsmappe als ZIP Datei mit daten für das Dev Repo,Importieren von einem Workbook als ZIP Datei,,,MD-3383 Arbeitsmappen,MD-3383 Arbeitsmappen,Cadenza Web ist gestartet,Cadenza Web ist gestartet,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Auf der Startseite, im Navigator, auf den drei Punkte Button rechts neben der Suchleiste klicken
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+
+Arbeitsmappe importieren
+Repository neu einlesen...
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+3) Bei ""Datei *"" auf Bitte wählen Sie eine Datei aus. klicken und die angehängte ZIP-Datei auswählen
+Expected result: Die Angehängte Datei wird im Import Dialog angezeigt
+4) Unten rechts auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet","1) Klicke im Navigator auf die drei Punkte rechts neben der Suchleiste
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+Arbeitsmappe importieren
+Repository neu einlesen...
+
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+
+3) Bei ""Datei *"" auf ""Bitte wählen Sie eine Datei aus."" klicken und die angehängte ZIP-Datei auswählen
+Expected result: Die angehängte Datei wird im Import-Dialog angezeigt
+
+4) Wähle als Repository ""Ladesaeulen""
+Expected result: Es erscheint das Repository ""Ladesaeulen"" unter ""Repository""
+
+5) Unten links auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet"
+TC-12612,[e2e] Workbook exportieren über den Navigator,,,,,,,MD-3383 Arbeitsmappen,MD-3383 Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+",Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Mit der Maus über ein vorhandenes Workbook hovern.
+Expected result: Der eintrag im Navigator wird dunkel grau unterlegt, rechts vom Namen werden drei Punkte angezeigt
+2) Klicke auf die drei Punkte rechts neben dem Workbook eintrag.
+Expected result: Ein Kontextmenü öffnet sich
+3) Klicke auf ""Arbeitsmappe exportieren"" im Kontextmenü
+Expected result: Das Workbook wird exportiert und vom Browser automatisch im Downloadverzeichnis gespeichert","1) Im Navigator mit der Maus über die im TC-12604 eingeladene Arbeitsmappe hovern.
+Expected result: Der Eintrag im Navigator wird dunkelgrau unterlegt, rechts vom Namen werden drei Punkte angezeigt
+
+2) Klicke auf die drei Punkte rechts neben dem Namen der Arbeitsmappe.
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke auf ""Arbeitsmappe exportieren"" im Kontextmenü
+Expected result: Das Workbook wird exportiert und vom Browser automatisch im Downloadverzeichnis gespeichert"
+TC-12613,[e2e] Workbook exportieren aus einer Arbeitsmappe heraus,,,,,,,MD-3383 Arbeitsmappen,MD-3383 Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+2) Klicke oben rechts auf die drei Punkte ""Mehr""
+Expected result: Ein Kontextmenü öffnet sich
+3) Gehe auf ""Export"" und klicke auf ""Workbook (*.cwb)
+Expected result: Das Workbook wird exportiert und vom Browser automatisch im Downloadverzeichnis gespeichert
+","1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf die drei Punkte ""Mehr""
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Gehe auf ""Exportieren"" und klicke auf ""Arbeitsmappe (*.zip)
+Expected result: Die Arbeitsblatt wird exportiert und vom Browser automatisch im Downloadverzeichnis gespeichert
+"
+TC-12614,[e2e] Arbeitsblatt duplizieren,,,,,,,MD-3475 Allgemein Arbeitsblätter,MD-3475 Allgemein Arbeitsblätter,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+Expected result: Die Arbeitsmappe wird geöffnet und das erste Arbeitsblatt wird angezeigt
+2) Klicke oben auf den Namen des Arbeitsblatts
+Expected result: Ein Dropdownmenü wird angezeigt
+3) Klicke auf Arbeitsblatt duplizieren
+Expected result: Ein Menü erscheint um der Kopie einen Namen zu geben
+4) Klicke auf den Button ""Duplizieren""
+Expected result: Die Kopie des Arbeitsblatts wird erstellt und gleich geöffnet","1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Die Arbeitsmappe wird geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke in der Werkzeugsleiste der Arbeitsmappe auf den Namen des Arbeitsblatts
+Expected result: Ein Dropdownmenü wird angezeigt
+
+3) Klicke auf ""Arbeitsblatt duplizieren""
+Expected result: Ein Menü erscheint um der Kopie einen Namen zu geben
+
+4) Klicke auf  ""Duplizieren"" links unten
+Expected result: Die Kopie des Arbeitsblatts wird erstellt und gleich geöffnet"
+TC-12615,[e2e] Neue Sicht im Workbook erstellen - Karte,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+3) Klicke auf ""Karte""
+Expected result: Eine Kartensicht wird dem Arbeitsblatt des Workbooks hinzugefügt","1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts in der Werkzeugleiste der Arbeitsmappe auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke unter ""Sicht für Daten"" auf ""Karte""
+Expected result: Eine Kartensicht wird dem Arbeitsblatt des Arbeitsmappe hinzugefügt"
+TC-12616,[e2e] Neue Sicht im Workbook erstellen - Tabelle,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf ""Neue Sicht""
+
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke auf ""Tabelle (gruppiert)""
+Expected result: Eine Tabellensicht wird dem Arbeitsblatt des Workbooks hinzugefügt ohne Inhalt
+","1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts  in der Werkzeugleiste der Arbeitsmappe auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke unter Sicht für Daten"" auf ""Tabelle (gruppiert)""
+Expected result: Eine Tabellensicht wird dem Arbeitsblatt des Workbooks hinzugefügt ohne Inhalt
+"
+TC-12617,[e2e] Neue Sicht im Workbook erstellen - Säulendiagramm,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf ""Neue Sicht""
+
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke auf ""Säulendiagramm""
+Expected result: Eine Säulendiagrammsicht wird dem Arbeitsblatt des Workbooks hinzugefügt ohne Inhalt
+","1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts in der Werkzeugleiste der Arbeitsmappe auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke unter Sicht für Daten auf ""Säulendiagramm""
+Expected result: Eine Säulendiagrammsicht wird dem Arbeitsblatt des Workbooks hinzugefügt ohne Inhalt"
+TC-12618,[e2e] Neue Sicht im Workbook erstellen - Weitere Einträge öffnen,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,"Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604 [e2e]Arbeitsmappe importieren <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15084>
+","Eine Arbeitsmappe wurde erstellt oder importiert wie in TC-12604
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne die Arbeitsmappe
+
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf ""Neue Sicht""
+
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke auf ""Weitere...""
+Expected result: Ein PopUp Fenster erscheint mit allen arten von Sichten zur Auswahl","1) 1) Öffne die im TC-12604 eingeladene Arbeitsmappe
+Expected result: Arbeitsmappe ist geöffnet und das erste Arbeitsblatt wird angezeigt
+
+2) Klicke oben rechts auf ""Neue Sicht""
+Expected result: Ein Kontextmenü öffnet sich
+
+3) Klicke auf ""Weitere...""
+Expected result: Ein Fenster erscheint mit allen Arten von Sichten zur Auswahl"
+TC-12619,[e2e] Neue Sicht im leeren Workbook erstellen - Karte,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,Ein neues leeres Workbook wurde erstellt,Eine neue leere Arbeitsmappe wurde erstellt,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) In der Sicht unter Vorschlägen für Visualisierungstypen auf ""Karte"" klicken
+Expected result: Eine Kartensicht ohne Daten wird angezeigt","1) In der neuen leeren Arbeitsmappe in der leeren Sicht unter ""Neue Sicht erstellen"" auf ""Karte"" klicken
+Expected result: Eine Kartensicht ohne Daten wird angezeigt"
+TC-12620,[e2e] Neue Sicht im leeren Workbook erstellen - Tabelle,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,Ein neues leeres Workbook wurde erstellt,Eine neue leere Arbeitsmappe wurde erstellt,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) In der Sicht unter vorschlägen für Visualisierungstypen auf ""Tabelle (gruppiert)"" klicken
+
+Expected result: Eine Tabellensicht ohne Inhalt wird angezeigt","1) In der neuen leeren Arbeitsmappe in der leeren Sicht unter ""Neue Sicht erstellen"" auf ""Tabelle (gruppiert)"" klicken
+Expected result: Eine Tabellensicht ohne Daten wird angezeigt"
+TC-12621,[e2e] Neue Sicht im leeren Workbook erstellen - Säulendiagramm,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,Ein neues leeres Workbook wurde erstellt,Eine neue leere Arbeitsmappe wurde erstellt,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) In der Sicht unter vorschlägen für Visualisierungstypen auf ""Säulendiagramm"" klicken
+
+Expected result: Eine Säulendiagrammsicht ohne Inhalt wird angezeigt","1) In der neuen leeren Arbeitsmappe in der leeren Sicht unter ""Neue Sicht erstellen"" auf ""Säulendiagramm"" klicken
+Expected result: Eine Säulendiagrammsicht ohne Daten wird angezeigt"
+TC-12622,[e2e] Neue Sicht im leeren Workbook erstellen - Weitere Einträge anzeigen,,,,,,,MD-2409 Sichten in Arbeitsmappen,MD-2409 Sichten in Arbeitsmappen,Ein neues leeres Workbook wurde erstellt,Eine neue leere Arbeitsmappe wurde erstellt,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) In der Sicht unter vorschlägen für Visualisierungstypen auf ""Weitere ..."" klicken
+
+Expected result: Ein PopUp öffnet sich mit allen Arten von Sichten zur Auswahl
+2) Im Dialog für Visualisierungstypen auf einen beliebigen Typ klicken.
+Expected result: Eine neue Sicht des entsprechenden Typs wird erstellt und angezeigt.
+","1) In der neuen leeren Arbeitsmappe in der leeren Sicht unter ""Neue Sicht erstellen"" auf ""Weitere ..."" klicken
+Expected result: Ein Fenster erscheint mit allen Arten von Sichten zur Auswahl
+
+2) Im Dialog für Visualisierungstypen auf einen beliebigen Typ klicken.
+Expected result: Eine neue Sicht des entsprechenden Typs wird erstellt und angezeigt."
+TC-13117,[e2e] Arbeitsmappe importieren aus alter Version (.cwb),workbook-92.cwb,Keine CWB-Datei vorhanden!,Importieren von einem Workbook als CWB Datei mit daten für das Dev Repo,Importieren von einem Workbook als CWB Datei mit Daten für das Gewässer-Repository,,,MD-3383 Arbeitsmappen,MD-3383 Arbeitsmappen,Cadenza Web ist gestartet,Cadenza Web ist gestartet,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Auf der Startseite, im Navigator, auf den drei Punkte Button rechts neben der Suchleiste klicken
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+
+Arbeitsmappe importieren
+Repository neu einlesen...
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+3) Bei ""Datei *"" auf Bitte wählen Sie eine Datei aus. klicken und die angehängte CWB-Datei auswählen
+Expected result: Die Angehängte Datei wird im Import Dialog angezeigt
+4) Unten rechts auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet","1) Klicke im Navigator auf die drei Punkte rechts neben der Suchleiste
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+Arbeitsmappe importieren
+Repository neu einlesen...
+
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+
+3) Bei ""Datei *"" auf ""Bitte wählen Sie eine Datei aus."" klicken und die angehängte CWB-Datei auswählen
+Expected result: Die Angehängte Datei wird im Import-Dialog angezeigt
+
+4) Unten links auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet"
+TC-13118,[e2e] Arbeitsmappe importieren aus aktueller Version (.zip),,,Importieren von einem Workbook als ZIP Datei mit daten für das Dev Repo,Importieren von einer Arbeitsmappe als ZIP-Datei,,,MD-3383 Arbeitsmappen,MD-3383 Arbeitsmappen,"Eine Arbeitsmappe wurde exportiert wie in TC-12612 [e2e] Workbook exportieren über den Navigator <https://qtest.disy.net/p/3/portal/project#tab=testdesign&object=1&id=15092>
+
+Die verwendete Version von Cadenza stimmt überein.
+","Eine Arbeitsmappe wurde exportiert wie in TC-12612
+
+Die verwendete Version von Cadenza stimmt überein.
+",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Auf der Startseite, im Navigator, auf den drei Punkte Button rechts neben der Suchleiste klicken
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+
+Arbeitsmappe importieren
+Repository neu einlesen...
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+3) Bei ""Datei *"" auf Bitte wählen Sie eine Datei aus. klicken und die angehängte ZIP-Datei auswählen
+Expected result: Die Angehängte Datei wird im Import Dialog angezeigt
+4) Im Feld ""Workbook Name"" einen neuen Namen vergeben.
+
+Expected result: Der neue Name wird übernommen.
+
+5) Unten rechts auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet","1) Klicke im Navigator auf die drei Punkte rechts neben der Suchleiste
+Expected result: Ein Kontextmenü öffnet sich, zur Option sind:
+Arbeitsmappe importieren
+Repository neu einlesen...
+
+2) Auf ""Arbeitsmappe importieren"" klicken
+Expected result: Ein Dialog zum importieren einer Arbeitsmappe öffnet sich.
+
+3) Bei ""Datei *"" auf ""Bitte wählen Sie eine Datei aus."" klicken und die angehängte ZIP-Datei auswählen
+Expected result: Die Angehängte Datei wird im Import-Dialog angezeigt
+
+4) Im Feld ""Name der Arbeitsmappe"" einen neuen Namen vergeben.
+Expected results: Der neue Name wird übernommen.
+
+5) Unten links auf ""Importieren"" klicken
+Expected result: Der Import Dialog schließt sich.
+Die importierte Arbeitsmappe wird im Navigator ganz unten aufgelistet"
+TC-13948,e2e - PDF Bericht einer aggregierten Tabelle erzeugen,,,,,9.1,9.1,MD-4230 Tabelle,MD-4230 Tabelle,"Dev Repo:
+
+Die Arbeitsmappe ""AutomobileWorkbook"" ist geöffnet.","Gewässer-Repository:
+
+Die Arbeitsmappe ""Gewässergüte"" ist geöffnet.",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke auf den Drei-Punkte Button im Header der Tabellen Sicht ""Collection Automobile"".
+Expected result: Menü ist angezeigt.
+
+2) Wähle ""Exportieren - Bericht (PDF)"" aus.
+
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"" und ""Liste der Filter"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum.","1) Öffnen das Arbeitsblatts ""Messstellenliste"" in der Werkzeugleiste der Arbeitsmappe
+Expected results: Arbeitsblatt wird geöffnet.
+
+2) Klicke auf die drei Punkte  ""Mehr"" innerhalb der Tabellen-Sicht.
+Expected result: Kontextmenü ist angezeigt.
+
+3) Wähle ""Exportieren"" - ""Bericht (*.pdf)...""
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"", und ""Liste der Filter"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum."
+TC-13949,e2e - PDF Bericht einer Karte (Polygone) erzeugen,,,,,9.1,9.1,MD-4231 Karte,MD-4231 Karte,"Dev Repo:
+
+Die Arbeitsmappe ""AutomobileWorkbook"" ist geöffnet.","Gewässer-Repository:
+
+Die Arbeitsmappe ""Gewässergüte"" ist geöffnet.",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke auf den Drei-Punkte Button im Header der Karten Sicht ""Collection Automobile"".
+Expected result: Menü ist angezeigt.
+
+2) Wähle ""Exportieren - Bericht (PDF)"" aus.
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"", ""Legende"" und ""Filter der Sicht"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum.","1) Öffnen das Arbeitsblatts ""Messstellenkarte"" in der Werkzeugleiste der Arbeitsmappe
+Expected results: Arbeitsblatt wird geöffnet.
+
+2) Klicke auf die drei Punkte  ""Mehr"" innerhalb der Karten-Sicht.
+Expected result: Kontextmenü ist angezeigt.
+
+3) Wähle ""Exportieren"" - ""Bericht (*.pdf)...""
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"", ""Legende"" und ""Filter der Sicht"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum."
+TC-13950,e2e - PDF Bericht eines Säulendiagramms erzeugen,,,,,9.1,9.1,MD-4232 Diagramm,MD-4232 Diagramm,"Dev Repo:
+
+Die Arbeitsmappe ""AutomobileWorkbook"" ist geöffnet.","Gewässer-Repository:
+
+Die Arbeitsmappe ""Gewässergüte"" ist geöffnet.",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke auf den Drei-Punkte Button im Header der Diagramm Sicht ""Collection Automobile - Registered by Country name"".
+Expected result: Menü ist angezeigt.
+
+2) Wähle ""Exportieren - Bericht (PDF)"" aus.
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"", ""Legende"" und ""Filter der Sicht"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum.","1) Öffne das Arbeitsblatts ""Häufigkeit der Messungen"" in der Werkzeugleiste der Arbeitsmappe
+Expected results: Arbeitsblatt wird geöffnet.
+
+2) Klicke auf die drei Punkte  ""Mehr"" innerhalb der Diagramm-Sicht ""Anzahl der Messungen pro Jahr"".
+Expected result: Kontextmenü ist angezeigt.
+
+3) Wähle ""Exportieren"" - ""Bericht (*.pdf)...""
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel der Sicht"",""Legende"" und ""Filter der Sicht"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum."
+TC-13951,e2e - PDF Bericht eines Arbeitsblatts erzeugen,,,,,9.1,9.1,MD-4411 Allgemein,MD-4411 Allgemein,"Die Arbeitsmappe ""AutomobileWorkbook"" ist geöffnet.","Gewässer-Repository:
+
+Die Arbeitsmappe ""Gewässergüte"" ist geöffnet.",Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Klicke auf den Drei-Punkte Button ""Mehr"".
+Expected result: Menü ist angezeigt.
+
+2) Wähle unter ""Arbeitsblatt"" - ""Bericht (*.pdf)...""
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel des Arbeitsblatts"", und ""Titel der Sichten"" ist aktiviert.
+
+3) Klicke auf ""Bericht Exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum.","1) Öffne das Arbeitsblatts ""Messstellenkarte"" in der Werkzeugleiste der Arbeitsmappe
+Expected results: Arbeitsblatt wird geöffnet.
+
+2) Klicke auf die drei Punkte  ""Mehr"".
+Expected result: Kontextmenü ist angezeigt.
+
+3) Wähle unter ""Arbeitsblatt"" - ""Bericht (*.pdf)...""
+Expected result: Dialog mit Einstellungen ist angezeigt. Die Standard Vorlage ist vorausgewählt.
+Die Option ""Titel des Arbeitsblatts"", und ""Titel der Sichten"" ist aktiviert.
+
+3) Klicke auf ""Bericht exportieren"".
+Expected result: Report wird erzeugt. Währenddessen wird eine Meldung und ein Ladesymbol im Dialog angezeigt.
+Nach Abschluss des Exports ist die PDF erzeugt.
+Der Dateiname der PDF enthält den Namen der Sicht und das Export-Datum."
+TC-13973,Karten-Sicht duplizieren,,,,,7.11,7.11,MD-4909 Karten-Sicht verwalten,MD-4909 Karten-Sicht verwalten,,,Dev,DEMO (9.4.127),,"1. Cadenza Web wurde gestartet (localhost:8080/cadenza) 
+2. Anmeldedaten (Admin/Admin) wurden eingegeben","1) Öffne Arbeitsmappe ""AutomobileWorkbook"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Klicke auf den 3-Punkte-Button innerhalb der Karten-Sicht ""Collection Automobile""
+Expected result: Kontextmenü erscheint mit den Optionen:
+- Duplizieren
+- In Arbeitsblatt duplizieren
+- Exportieren
+- Kopie ins Repository speichern
+- Designer öffnen
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich
+Die Sicht ist dupliziert.
+Die duplizierte Sicht erscheint neben der original Sicht.
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht","1) Öffne die Arbeitsmappe ""Übersicht Messstellen"" im Ordner ""Gewässergüte"".
+Expected result: Die Arbeitsmappe wird geöffnet, der Analysekontext ist nicht sichtbar.
+
+2) Öffne die Karten-Sicht ""Messstellenkarte"" über die Werkzeugliste der Arbeitsmappe.
+Expected result: Die Karte ""Messstellenlage und Wasserschutzgebiete eingefärbt nach Landkreisen"" wird angezeigt, der Analysekontext ist sichtbar.
+
+3) Klicke auf den 3-Punkte-Button innerhalb der Karten-Sicht ""Messstellenlage und Wasserschutzgebiete eingefärbt nach Landkreisen""
+Expected result: Kontextmenü erscheint mit den Optionen:
+- Duplizieren
+- In Arbeitsblatt duplizieren
+- Exportieren
+- Designer öffnen
+- Löschen
+
+3) Klicke auf ""Duplizieren""
+Expected result: Das Kontextmenü schließt sich. Die Sicht ist dupliziert.
+Die duplizierte Sicht erscheint neben der Original-Sicht.
+Beide Sichten teilen sich in gleichen Maßen den Platz der Original-Sicht."
