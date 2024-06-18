@@ -427,10 +427,10 @@ def delete_file_if_exist(file_path):
 
 
         
-screenshot_dir = './screenshot'
-html_dir = './html'
+screenshot_dir = 'screenshot'
+html_dir = 'html'
 context_dir = "./context"
-test_script_dir = "./test_script"
+test_script_dir = "test_script"
 state_script_dir = "./state_script"
 url = "http://localhost:8080/cadenza/login"
 #url = "http://localhost:8080/cadenza/workbooks/4yn3EfwE6YXaoBrRpJ70,hash=Dd0q_0IfSMJ1-kE2h4799dEtzrkYgT7jskuYDSRree-ecJp6NM2bjSa8Zcw=/worksheets/zqXGiZTSRVSkPyCUMC6ivw"
@@ -458,24 +458,18 @@ async def main():
     new_script_path = None
     async with async_playwright() as p:
         try:
-
             if 'http' in url:
-                
-                # query item with hashed html
+                # Query item with hashed HTML
                 table_name = sanitize_table_name(get_table_name_from_url(url))
+                print(f"Table name: {table_name}")
                 create_website_table_if_not_exists(table_name)
-                query = f"SELECT * FROM {table_name} WHERE url = ?" # query with url instead of hashed html
+                query = f"SELECT * FROM {table_name} WHERE url = ?"  # Query with URL instead of hashed HTML
                 results = db_query_website(query, (url,))
-        
-                # await browser.close()
-        
-                if len(results) == 0:
-                    print(f"The url {url} is not exist in Website DB. Add it to the DB.")
-                    table_name, state_item_id = await insert_init_website_to_db(url)
-        
-                    query = f"SELECT * FROM {table_name} WHERE id = ?"
-                    results = db_query_website(query, (state_item_id,))
-                    
+                # if len(results) == 0:
+                print(f"The URL {url} does not exist in Website DB. Adding it to the DB.")
+                table_name, state_item_id = await insert_init_website_to_db(url)
+                query = f"SELECT * FROM {table_name} WHERE id = ?"
+                results = db_query_website(query, (state_item_id,))
                 
             else:
                 # it's tuple [table_name, id]: query items with id {hashed_html, storage_state, playwright_code}, run playwright code and capture screenshot&html

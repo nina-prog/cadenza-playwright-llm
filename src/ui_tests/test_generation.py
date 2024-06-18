@@ -1,20 +1,38 @@
 """ This script generates the UI tests using LLMs. """
-import os
-from playwright.sync_api import sync_playwright
-from llm_integration import generate_test_cases
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level='INFO')  # Change the level to 'DEBUG' to see more information
+logger = setup_logger(__name__, level='DEBUG')  # Change the level to 'DEBUG' to see more information
 
 
-def generate_tests():
-    """ Generates the UI tests using the LLMs. """
-    test_cases = generate_test_cases()
-    for idx, test_case in enumerate(test_cases):
-        with open(f"src/ui_tests/test_cases/test_case_{idx + 1}.py", "w") as f:
-            f.write(test_case)
+def generate_code(combined_input: str, file_name: str, model_name="gpt2") -> str:
+    """ Generate the test case using the specified LLM model.
 
+    :param combined_input: The combined input for the LLM.
+    :param file_name: The name of the file to save the generated test case.
+    :param model_name: The name of the LLM model to use.
+    :return: The generated test case.
+    """
+    model_selection = ["gpt2"]
 
-if __name__ == "__main__":
-    generate_tests()
+    generated_text = ""
+    match model_name:
+        case "gpt2":
+            # Load the model
+            tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+            model = GPT2LMHeadModel.from_pretrained(model_name)
+
+            # Generate the code
+            inputs = tokenizer.encode(combined_input, return_tensors="pt", truncation=True)
+            outputs = model.generate(inputs, max_length=500, num_return_sequences=1, do_sample=True)
+            generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        case _:
+            logger.error("Model not supported. Please use one of the following: {model_collection}")
+
+    # Save the generated code to a new file
+    with open(f"pred_test_script/{file_name}.py", "w") as file:
+        file.write(generated_text)
+        logger.debug(f"Generated code saved to './pred_test_script/{file_name}.py'")
+
+    return generated_text
