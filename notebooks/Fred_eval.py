@@ -60,5 +60,7 @@ else:
     script_content.insert(insert_position, html_extraction_command)
     # Join the script content back into a single string
     modified_script_content = ''.join(script_content)
-    print(modified_script_content)
+    # print(modified_script_content)
     exec(modified_script_content)
+
+    
