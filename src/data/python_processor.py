@@ -10,7 +10,7 @@ def parse_python(precondition_path: str) -> str:
     :param precondition_path: The path to the Python file.
     :return: The text content of the Python file.
     """
-    with open(precondition_path, "r") as file:
+    with open(precondition_path, "r", encoding='utf-8') as file:
         python_code = file.read()
     logger.debug(f"Python code parsed successfully. - Lines of Code: {len(python_code.splitlines())})")
 

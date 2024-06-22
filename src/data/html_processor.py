@@ -15,7 +15,7 @@ def parse_html(html_path: str, max_length: int = 200) -> str:
     :param html_path: The path to the HTML file.
     :return: The text content of the HTML file.
     """
-    with open(html_path, "r") as file:
+    with open(html_path, "r", encoding='utf-8') as file:
         html_content = file.read()
     # Parse the HTML content
     soup = BeautifulSoup(html_content, 'html.parser')
