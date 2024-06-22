@@ -12,6 +12,6 @@ def parse_python(precondition_path: str) -> str:
     """
     with open(precondition_path, "r", encoding='utf-8') as file:
         python_code = file.read()
-    logger.debug(f"Python code parsed successfully. - Lines of Code: {len(python_code.splitlines())})")
+    logger.debug(f"Python code parsed successfully. - Lines of Code: {len(python_code.splitlines())}")
 
     return python_code
