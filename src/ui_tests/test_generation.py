@@ -49,9 +49,40 @@ async def generate_code_with_model_on_cluster(input_model, file_name: str, model
     """
     generated_text = await model.run_inference(input_model)
 
+    code, programming_language = extract_code_for_generated_text(generated_text)
+    file_ending = ''
+    if programming_language == 'python':
+        file_ending = '.py'
+    elif programming_language == 'javascript':
+        file_ending = '.ts'
+
     # Save the generated code to a new file
-    with open(f"pred_test_script/{file_name}.py", "w") as file:
-        file.write(generated_text)
+    with open(f"pred_test_script/{file_name}" + file_ending, "w") as file:
+        file.write(code)
         logger.debug(f"Generated code saved to './pred_test_script/{file_name}.py'")
 
     return generated_text
+
+
+def extract_code_for_generated_text(generated_text: str) -> [str, str]:
+    """ Extract the code from the generated text.
+
+    :param generated_text: The input for the LLM.
+    :return: The code and the programming language of the code.
+    """
+    code_separator = "```"
+    newline_symbol = "\n"
+
+    code = generated_text
+    # Remove first "```"
+    start_index = code.find(code_separator) + len(code_separator)
+    code = code[start_index:]
+    # Save and remove programming language from code
+    start_index = code.find(newline_symbol)
+    programming_language = code[:start_index]
+    start_index += len(newline_symbol)
+    code = code[start_index:]
+    # Remove last "```"
+    end_index = code.find(code_separator)
+    code = code[:end_index]
+    return code, programming_language

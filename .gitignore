@@ -1,7 +1,9 @@
 # Data directories with large number of files
-html/*
-screenshots/*
-test_scripts/*
+html/
+screenshot/
+test_script/
+pred_test_script/
+*.zip
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
