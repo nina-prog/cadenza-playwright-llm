@@ -19,7 +19,7 @@ def create_combined_input(html_text: str, image_text: str, precondition_text: st
         "Below are the details of the webpage. Use this information to generate a complete Python Playwright test "
         "script following the instructions.\n\n"
 
-        "### Website HTML Content (simplified):\n"
+        "### Website HTML Elements:\n"
         f"{html_text}\n\n"
 
         "### Current Website Screenshot Description:\n"
@@ -32,7 +32,7 @@ def create_combined_input(html_text: str, image_text: str, precondition_text: st
         f"{description}\n\n"
 
         "### Instructions:\n"
-        "1. Use the precondition code to set up the initial state.\n"
+        "1. Use the precondition code to set up the initial state. Just add new code to it below the given one.\n"
         "2. Follow the steps in the test description to perform actions and verify outcomes.\n"
         "3. Ensure the generated script is in Python and uses Playwright's sync API.\n"
 
@@ -57,7 +57,7 @@ def create_combined_input_for_multimodal_model(html_text: str, precondition_text
         "Below are the details of the webpage. Use this information to generate a complete Python Playwright test "
         "script following the instructions.\n\n"
 
-        "### Website HTML Content (simplified):\n"
+        "### Website HTML Elements:\n"
         f"{html_text}\n\n"
 
         "### Current Website Screenshot:\n"
@@ -70,7 +70,7 @@ def create_combined_input_for_multimodal_model(html_text: str, precondition_text
         f"{description}\n\n"
 
         "### Instructions:\n"
-        "1. Use the precondition code to set up the initial state.\n"
+        "1. Use the precondition code to set up the initial state. Just add new code to it below the given one.\n"
         "2. Follow the steps in the test description to perform actions and verify outcomes.\n"
         "3. Ensure the generated script is in Python and uses Playwright's sync API.\n"
 
