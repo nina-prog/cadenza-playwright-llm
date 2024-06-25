@@ -11,7 +11,7 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__, level=logging.DEBUG)  # Change to DEBUG for more verbosity
 
 # Constants
-MAX_LENGTH = None  # Maximum length of the input texts for the LLM
+MAX_LENGTH = 300  # Maximum length of the input texts for the LLM
 
 
 def main(html_path: str, image_path: str, precondition_path: str, description: str):
@@ -24,7 +24,7 @@ def main(html_path: str, image_path: str, precondition_path: str, description: s
     """
     logger.info("Loading context...")
     # Parse HTML and extract image text
-    html_text = extract_html_info(html_path, max_length=MAX_LENGTH)
+    html_text = extract_html_info(html_path, max_length=None)
     image_text = extract_text_from_image(image_path, max_length=MAX_LENGTH)
     # Parse Python precondition
     precondition_text = parse_python(precondition_path)
