@@ -49,38 +49,62 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
     inputs = soup.find_all('input')
     links = soup.find_all('a')
 
-    html_elements = "HTML Elements:\n"
+    html_elements = ""
 
+    buttons_ls = []
     for button in buttons:
-        button_text = clean_string(button.text)
-        button_id = button.get("id", "No ID")
-        button_class = ' '.join(button.get("class", []))  # Convert list to string with space separator
-        button_type = button.get("type", "button")
-        html_elements += f'Button: {button_text} - ID: {button_id} - Class: {button_class} - Type: {button_type}\n'
+        args = {
+            "text": clean_string(button.text),
+            "id": button.get("id"),
+            "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
+            "name": button.get("name")
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        if args_filtered.get("text") or args_filtered.get("id"):
+            buttons_ls.append(args_filtered)
 
+    buttons_str = '\n'.join([str(button) for button in buttons_ls])  # <delete>
+    html_elements += f"Buttons: \n{buttons_str}\n"  # f"Buttons: \n{buttons_ls}\n"
+
+    inputs_ls = []
     for input_field in inputs:
-        input_name = input_field.get("name", "No Name")
-        input_type = input_field.get("type", "text")
-        input_value = input_field.get("value", "")
-        input_placeholder = clean_string(input_field.get("placeholder", ""))
-        input_id = input_field.get("id", "No ID")
-        input_class = ' '.join(input_field.get("class", []))  # Convert list to string with space separator
-        input_label = input_field.get("aria-label", "")
-        html_elements += f'Input: {input_name} - Type: {input_type} - Value: {input_value} - Placeholder: {input_placeholder} - ID: {input_id} - Class: {input_class} - Label: {input_label}\n'
+        args = {
+            "id": input_field.get("id"),
+            "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
+            "name": input_field.get("name"),
+            "label": input_field.get("aria-label"),
+            "type": input_field.get("type"),
+            "placeholder": clean_string(input_field.get("placeholder")),
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        if args.get("name") or args.get("id") or args.get("label"):
+            inputs_ls.append(args_filtered)
 
+    inputs_str = '\n'.join([str(input_field) for input_field in inputs_ls])  # <delete>
+    html_elements += f"Inputs: \n{inputs_str}\n"  # f"Inputs: \n{inputs_ls}\n"
+
+    links_ls = []
     for link in links:
-        link_text = clean_string(link.text)
-        link_href = link.get("href", "#")
-        link_id = link.get("id", "No ID")
-        link_class = ' '.join(link.get("class", []))  # Convert list to string with space separator
-        html_elements += f'Link: {link_text} - Href: {link_href} - ID: {link_id} - Class: {link_class}\n'
+        args = {
+            "text": clean_string(link.text),
+            "id": link.get("id"),
+            "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
+            "href": link.get("href"),
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        if args_filtered.get("text") or args_filtered.get("id"):
+            links_ls.append(args_filtered)
+
+    links_str = '\n'.join([str(link) for link in links_ls])  # <delete>
+    html_elements += f"Links: \n{links_str}\n"  # f"Links: \n{links_ls}\n"
 
     html_elements.strip()
 
     if max_length:
         html_elements = truncate_text(html_elements, max_length=max_length)
 
-    logger.debug(f"HTML elements extracted successfully. - Number of Elements: {len(html_elements.splitlines())}")
+    logger.debug(
+        f"HTML elements extracted successfully. - Number of Elements: {len(html_elements.splitlines())} - Number of Characters: {len(html_elements)}")
 
     return html_elements
 
