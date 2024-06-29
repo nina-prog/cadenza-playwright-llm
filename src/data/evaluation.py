@@ -57,7 +57,4 @@ def eval_code_bleu(generated_code: str, validation_code: str, precondition_code:
     second_bleu_score = sentence_bleu(references=[validation_code_tokens[precondition_code_length_without_end_lines:]],
                                       hypothesis=generated_code_tokens[precondition_code_length_without_end_lines:])
 
-    print(first_bleu_score)
-    print(second_bleu_score)
-
     return (1 - alpha) * first_bleu_score + alpha * second_bleu_score
