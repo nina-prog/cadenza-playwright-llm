@@ -1,6 +1,7 @@
 """ This script generates the UI tests using LLMs. """
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 from src.llm.access_2_cluster import Access2Cluster
+from src.data.python_processor import parse_python
 
 from src.utils.logger import setup_logger
 
@@ -57,10 +58,14 @@ async def generate_code_with_model_on_cluster(input_model, file_name: str, model
         file_ending = '.ts'
 
     # Save the generated code to a new file
-    with open(f"pred_test_script/{file_name}" + file_ending, "w") as file:
+    file_path = f"pred_test_script/{file_name}" + file_ending
+    with open(file_path, "w") as file:
         file.write(code)
         logger.debug(f"Generated code saved to './pred_test_script/{file_name}.py'")
 
+    # TODO: Look for a better implementation!
+    # Load code from created file to get utf-8 encoding and ensure correct display of umlauts.
+    code = parse_python(file_path)
     return code, programming_language
 
 
