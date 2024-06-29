@@ -1,4 +1,4 @@
-from src.data.html_processor import extract_html_info
+from src.data.html_processor import extract_html_info, extract_html_info_short
 from src.data.python_processor import parse_python
 from src.data.image_processor import extract_text_from_image
 from src.data.input_combiner import create_combined_input, create_combined_input_for_multimodal_model
@@ -65,7 +65,7 @@ async def main_cluster_multimodal_model(html_path: str, image_path: str, precond
     """
     logger.info("Loading context...")
     # Parse HTML and extract image text
-    html_text = extract_html_info(html_path)
+    html_text = extract_html_info_short(html_path)
     # Parse Python precondition
     precondition_text = parse_python(precondition_path)
     logger.info("Context loaded successfully.")
