@@ -109,7 +109,7 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
     return html_elements
 
 
-def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000, max_item_length: int = 40) -> str:
+def extract_html_info_short(file_path: str, max_length: Union[int, None] = 3000, max_item_length: int = 40) -> str:
     """Extract relevant information from an HTML file.
 
     :param file_path: The path to the HTML file.
