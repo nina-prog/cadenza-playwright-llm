@@ -109,6 +109,119 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
     return html_elements
 
 
+def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000, max_item_length: int = 40) -> str:
+    """Extract relevant information from an HTML file.
+
+    :param file_path: The path to the HTML file.
+    :param max_length: The maximum length of the extracted text.
+    :param max_item_length: The maximum length of each item of the extracted information of the HTML file.
+    :return: A formatted string containing the extracted HTML elements.
+    """
+    with open(file_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    buttons = soup.find_all('button')
+    inputs = soup.find_all('input')
+    links = soup.find_all('a')
+
+    html_elements = ""
+
+    buttons_ls = []
+    for button in buttons:
+        args = {
+            "text": clean_string(button.text),
+            "id": button.get("id"),
+        #    "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
+            "name": button.get("name")
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
+
+        if args_filtered.get("text") or args_filtered.get("id"):
+            buttons_ls.append(args_filtered)
+
+    args_keys = ["text", "id", "class", "name"]
+    button_text_key_list = []
+    for key in args_keys:
+        text_for_key = 'Button ' + key + 's:\n'
+        buttons_ls_with_key = list(filter(lambda x: key in x.keys(), buttons_ls))
+        if buttons_ls_with_key:
+            text_for_key += ', '.join([button[key] for button in buttons_ls_with_key])
+            button_text_key_list.append(text_for_key)
+
+    buttons_str = '\n'.join([str(button) for button in button_text_key_list])  # <delete>
+    #html_elements += f"Buttons: \n{buttons_str}\n"  # f"Buttons: \n{buttons_ls}\n"
+    html_elements += f"{buttons_str}\n"
+
+    inputs_ls = []
+    for input_field in inputs:
+        args = {
+            "id": input_field.get("id"),
+        #    "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
+            "name": input_field.get("name"),
+            "label": input_field.get("aria-label"),
+            "type": input_field.get("type"),
+            "placeholder": clean_string(input_field.get("placeholder")),
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
+
+        if args.get("name") or args.get("id") or args.get("label"):
+            inputs_ls.append(args_filtered)
+
+    args_keys = ["id", "class", "name", "label", "type", "placeholder"]
+    inputs_text_key_list = []
+    for key in args_keys:
+        text_for_key = 'Input ' + key + 's:\n'
+        inputs_ls_with_key = list(filter(lambda x: key in x.keys(), inputs_ls))
+        if inputs_ls_with_key:
+            text_for_key += ', '.join([input[key] for input in inputs_ls_with_key])
+            inputs_text_key_list.append(text_for_key)
+
+    inputs_str = '\n'.join([str(input) for input in inputs_text_key_list])  # <delete>
+    #html_elements += f"Inputs: \n{inputs_str}\n"  # f"Inputs: \n{inputs_ls}\n"
+    html_elements += f"{inputs_str}\n"
+
+    links_ls = []
+    for link in links:
+        args = {
+            "text": clean_string(link.text),
+            "id": link.get("id"),
+        #    "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
+        #    "href": link.get("href"),
+        }
+        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
+
+        if args_filtered.get("text") or args_filtered.get("id"):
+            links_ls.append(args_filtered)
+
+    args_keys = ["text", "id", "class"]
+    links_text_key_list = []
+    for key in args_keys:
+        text_for_key = 'Link ' + key + 's:\n'
+        links_ls_with_key = list(filter(lambda x: key in x.keys(), links_ls))
+        if links_ls_with_key:
+            text_for_key += ', '.join([link[key] for link in links_ls_with_key])
+            links_text_key_list.append(text_for_key)
+
+    links_str = '\n'.join([str(link) for link in links_text_key_list])  # <delete>
+    #html_elements += f"Links: \n{links_str}\n"  # f"Links: \n{links_ls}\n"
+    html_elements += f"{links_str}\n"
+
+    html_elements.strip()
+
+    if max_length:
+        html_elements = truncate_text(html_elements, max_length=max_length)
+
+    logger.debug(
+        f"HTML elements extracted successfully. - Number of Elements: {len(html_elements.splitlines())} - Number of Characters: {len(html_elements)}")
+
+    return html_elements
+
+
 def html_extract_links(html_path: str) -> str:
     """Extract and format text content of links from an HTML file.
 
