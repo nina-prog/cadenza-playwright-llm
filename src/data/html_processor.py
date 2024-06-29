@@ -133,7 +133,7 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
         args = {
             "text": clean_string(button.text),
             "id": button.get("id"),
-        #    "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
+            "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
             "name": button.get("name")
         }
         args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
@@ -146,6 +146,8 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
     button_text_key_list = []
     for key in args_keys:
         text_for_key = 'Button ' + key + 's:\n'
+        if key == 'class':
+            text_for_key = 'Link ' + key + 'es:\n'
         buttons_ls_with_key = list(filter(lambda x: key in x.keys(), buttons_ls))
         if buttons_ls_with_key:
             text_for_key += ', '.join([button[key] for button in buttons_ls_with_key])
@@ -159,7 +161,7 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
     for input_field in inputs:
         args = {
             "id": input_field.get("id"),
-        #    "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
+            "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
             "name": input_field.get("name"),
             "label": input_field.get("aria-label"),
             "type": input_field.get("type"),
@@ -175,6 +177,8 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
     inputs_text_key_list = []
     for key in args_keys:
         text_for_key = 'Input ' + key + 's:\n'
+        if key == 'class':
+            text_for_key = 'Link ' + key + 'es:\n'
         inputs_ls_with_key = list(filter(lambda x: key in x.keys(), inputs_ls))
         if inputs_ls_with_key:
             text_for_key += ', '.join([input[key] for input in inputs_ls_with_key])
@@ -189,7 +193,7 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
         args = {
             "text": clean_string(link.text),
             "id": link.get("id"),
-        #    "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
+            "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
         #    "href": link.get("href"),
         }
         args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
@@ -202,6 +206,8 @@ def extract_html_info_short(file_path: str, max_length: Union[int, None] = 1000,
     links_text_key_list = []
     for key in args_keys:
         text_for_key = 'Link ' + key + 's:\n'
+        if key == 'class':
+            text_for_key = 'Link ' + key + 'es:\n'
         links_ls_with_key = list(filter(lambda x: key in x.keys(), links_ls))
         if links_ls_with_key:
             text_for_key += ', '.join([link[key] for link in links_ls_with_key])
