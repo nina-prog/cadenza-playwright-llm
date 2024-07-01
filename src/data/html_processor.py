@@ -33,11 +33,12 @@ def parse_html(html_path: str, max_length: int = 200) -> str:
     return html_text
 
 
-def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str:
+def extract_html_info(file_path: str, max_length: Union[int, None] = 200, max_item_length: int = 40, concat_mod: str = 'single') -> str:
     """Extract relevant information from an HTML file.
 
     :param file_path: The path to the HTML file.
     :param max_length: The maximum length of the extracted text.
+    :param max_item_length: The maximum length of each item of the extracted information of the HTML file.
     :return: A formatted string containing the extracted HTML elements.
     """
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -60,6 +61,7 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
             "name": button.get("name")
         }
         args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length} # Remove long values
         if args_filtered.get("text") or args_filtered.get("id"):
             buttons_ls.append(args_filtered)
 
@@ -77,6 +79,7 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
             "placeholder": clean_string(input_field.get("placeholder")),
         }
         args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}  # Remove long values
         if args.get("name") or args.get("id") or args.get("label"):
             inputs_ls.append(args_filtered)
 
@@ -89,9 +92,10 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
             "text": clean_string(link.text),
             "id": link.get("id"),
             "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
-            "href": link.get("href"),
+            #"href": link.get("href"),
         }
         args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
+        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}  # Remove long values
         if args_filtered.get("text") or args_filtered.get("id"):
             links_ls.append(args_filtered)
 
@@ -109,24 +113,7 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
     return html_elements
 
 
-def extract_html_info_short(file_path: str, max_length: Union[int, None] = 3000, max_item_length: int = 40) -> str:
-    """Extract relevant information from an HTML file.
-
-    :param file_path: The path to the HTML file.
-    :param max_length: The maximum length of the extracted text.
-    :param max_item_length: The maximum length of each item of the extracted information of the HTML file.
-    :return: A formatted string containing the extracted HTML elements.
-    """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
-
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    buttons = soup.find_all('button')
-    inputs = soup.find_all('input')
-    links = soup.find_all('a')
-
-    html_elements = ""
+###########################
 
     buttons_ls = []
     for button in buttons:
