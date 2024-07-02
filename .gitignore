@@ -197,3 +197,6 @@ yarn-error.log*
 
 # PNG images
 *.png
+
+# PNG images
+*.html
