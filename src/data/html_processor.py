@@ -33,11 +33,53 @@ def parse_html(html_path: str, max_length: int = 200) -> str:
     return html_text
 
 
-def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str:
-    """Extract relevant information from an HTML file.
+def extract_elements(soup: BeautifulSoup, tag: str, attributes: list, key_checks: list, max_item_length: int = 40) -> list:
+    """
+    Extracts and cleans specified attributes from an HTML element and filters elements based on key_checks.
+
+    :param soup: BeautifulSoup object containing the parsed HTML.
+    :param tag: The HTML tag to search for.
+    :param attributes: The list of attributes to extract from each tag.
+    :param key_checks: The list of keys to check for inclusion in the final list.
+    :param max_item_length: The maximum length of each attribute's value.
+    :return: A list of dictionaries containing the filtered attributes of the elements.
+    """
+    elements_ls = []
+    for element in soup.find_all(tag):
+        attrs_filtered = {
+            attr: clean_string(element.get(attr)) if attr != 'class' else ' '.join(element.get(attr, []))
+            for attr in attributes if element.get(attr) and len(element.get(attr)) < max_item_length
+        }
+        if any(attrs_filtered.get(key) for key in key_checks):
+            elements_ls.append(attrs_filtered)
+    return elements_ls
+
+
+def format_elements(elements_ls: list, element_type: str, concat_mod: str = 'single') -> str:
+    """Formats extracted elements into a string based on concat_mod."""
+    if not elements_ls:
+        return ""
+
+    if concat_mod == 'single':
+        elements_str = ', \n'.join([str(element) for element in elements_ls])
+        return f"{element_type}s: \n{elements_str}\n"
+
+    elif concat_mod == 'all':
+        combined_args = {f"{element_type} {k}{'es' if k == 'class' else 's'}": ', '.join(element[k] for element in elements_ls)
+                         for k in elements_ls[0].keys()}
+        combined_args_str = ', \n'.join([f"{k}: {v}" for k, v in combined_args.items()])
+        return f"{element_type}s: \n{combined_args_str}\n"
+
+
+def extract_html_info(file_path: str, max_length: Union[int, None] = None, max_attr_length: int = 40,
+                      concat_mod: str = 'single') -> str:
+    """
+    Extracts relevant information from an HTML file.
 
     :param file_path: The path to the HTML file.
     :param max_length: The maximum length of the extracted text.
+    :param max_attr_length: The maximum length of each item of the extracted information.
+    :param concat_mod: The mode of concatenation ('single' or 'all').
     :return: A formatted string containing the extracted HTML elements.
     """
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -45,187 +87,16 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = 200) -> str
 
     soup = BeautifulSoup(html_content, 'html.parser')
 
-    buttons = soup.find_all('button')
-    inputs = soup.find_all('input')
-    links = soup.find_all('a')
+    buttons_ls = extract_elements(soup, 'button', ['text', 'id', 'class', 'name'], ['text', 'id'], max_attr_length)
+    inputs_ls = extract_elements(soup, 'input', ['id', 'class', 'name', 'aria-label', 'type', 'placeholder'],
+                                 ['name', 'id', 'aria-label'], max_attr_length)
+    links_ls = extract_elements(soup, 'a', ['text', 'id', 'class'], ['text', 'id'], max_attr_length)
 
-    html_elements = ""
+    html_elements = format_elements(buttons_ls, 'Button', concat_mod)
+    html_elements += format_elements(inputs_ls, 'Input', concat_mod)
+    html_elements += format_elements(links_ls, 'Link', concat_mod)
 
-    buttons_ls = []
-    for button in buttons:
-        args = {
-            "text": clean_string(button.text),
-            "id": button.get("id"),
-            "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
-            "name": button.get("name")
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        if args_filtered.get("text") or args_filtered.get("id"):
-            buttons_ls.append(args_filtered)
-
-    buttons_str = '\n'.join([str(button) for button in buttons_ls])  # <delete>
-    html_elements += f"Buttons: \n{buttons_str}\n"  # f"Buttons: \n{buttons_ls}\n"
-
-    inputs_ls = []
-    for input_field in inputs:
-        args = {
-            "id": input_field.get("id"),
-            "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
-            "name": input_field.get("name"),
-            "label": input_field.get("aria-label"),
-            "type": input_field.get("type"),
-            "placeholder": clean_string(input_field.get("placeholder")),
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        if args.get("name") or args.get("id") or args.get("label"):
-            inputs_ls.append(args_filtered)
-
-    inputs_str = '\n'.join([str(input_field) for input_field in inputs_ls])  # <delete>
-    html_elements += f"Inputs: \n{inputs_str}\n"  # f"Inputs: \n{inputs_ls}\n"
-
-    links_ls = []
-    for link in links:
-        args = {
-            "text": clean_string(link.text),
-            "id": link.get("id"),
-            "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
-            "href": link.get("href"),
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        if args_filtered.get("text") or args_filtered.get("id"):
-            links_ls.append(args_filtered)
-
-    links_str = '\n'.join([str(link) for link in links_ls])  # <delete>
-    html_elements += f"Links: \n{links_str}\n"  # f"Links: \n{links_ls}\n"
-
-    html_elements.strip()
-
-    if max_length:
-        html_elements = truncate_text(html_elements, max_length=max_length)
-
-    logger.debug(
-        f"HTML elements extracted successfully. - Number of Elements: {len(html_elements.splitlines())} - Number of Characters: {len(html_elements)}")
-
-    return html_elements
-
-
-def extract_html_info_short(file_path: str, max_length: Union[int, None] = 3000, max_item_length: int = 40) -> str:
-    """Extract relevant information from an HTML file.
-
-    :param file_path: The path to the HTML file.
-    :param max_length: The maximum length of the extracted text.
-    :param max_item_length: The maximum length of each item of the extracted information of the HTML file.
-    :return: A formatted string containing the extracted HTML elements.
-    """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
-
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    buttons = soup.find_all('button')
-    inputs = soup.find_all('input')
-    links = soup.find_all('a')
-
-    html_elements = ""
-
-    buttons_ls = []
-    for button in buttons:
-        args = {
-            "text": clean_string(button.text),
-            "id": button.get("id"),
-            "class": ' '.join(button.get("class", [])),  # Convert list to string with space separator
-            "name": button.get("name")
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
-
-        if args_filtered.get("text") or args_filtered.get("id"):
-            buttons_ls.append(args_filtered)
-
-    args_keys = ["text", "id", "class", "name"]
-    button_text_key_list = []
-    for key in args_keys:
-        text_for_key = 'Button ' + key + 's:\n'
-        if key == 'class':
-            text_for_key = 'Link ' + key + 'es:\n'
-        buttons_ls_with_key = list(filter(lambda x: key in x.keys(), buttons_ls))
-        if buttons_ls_with_key:
-            text_for_key += ', '.join([button[key] for button in buttons_ls_with_key])
-            button_text_key_list.append(text_for_key)
-
-    buttons_str = '\n'.join([str(button) for button in button_text_key_list])  # <delete>
-    #html_elements += f"Buttons: \n{buttons_str}\n"  # f"Buttons: \n{buttons_ls}\n"
-    html_elements += f"{buttons_str}\n"
-
-    inputs_ls = []
-    for input_field in inputs:
-        args = {
-            "id": input_field.get("id"),
-            "class": ' '.join(input_field.get("class", [])),  # Convert list to string with space separator
-            "name": input_field.get("name"),
-            "label": input_field.get("aria-label"),
-            "type": input_field.get("type"),
-            "placeholder": clean_string(input_field.get("placeholder")),
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
-
-        if args.get("name") or args.get("id") or args.get("label"):
-            inputs_ls.append(args_filtered)
-
-    args_keys = ["id", "class", "name", "label", "type", "placeholder"]
-    inputs_text_key_list = []
-    for key in args_keys:
-        text_for_key = 'Input ' + key + 's:\n'
-        if key == 'class':
-            text_for_key = 'Link ' + key + 'es:\n'
-        inputs_ls_with_key = list(filter(lambda x: key in x.keys(), inputs_ls))
-        if inputs_ls_with_key:
-            text_for_key += ', '.join([input[key] for input in inputs_ls_with_key])
-            inputs_text_key_list.append(text_for_key)
-
-    inputs_str = '\n'.join([str(input) for input in inputs_text_key_list])  # <delete>
-    #html_elements += f"Inputs: \n{inputs_str}\n"  # f"Inputs: \n{inputs_ls}\n"
-    html_elements += f"{inputs_str}\n"
-
-    links_ls = []
-    for link in links:
-        args = {
-            "text": clean_string(link.text),
-            "id": link.get("id"),
-            "class": ' '.join(link.get("class", [])),  # Convert list to string with space separator
-        #    "href": link.get("href"),
-        }
-        args_filtered = {key: value for key, value in args.items() if value}  # Remove empty values
-        args_filtered = {key: value for key, value in args_filtered.items() if len(value) < max_item_length}
-
-        if args_filtered.get("text") or args_filtered.get("id"):
-            links_ls.append(args_filtered)
-
-    args_keys = ["text", "id", "class"]
-    links_text_key_list = []
-    for key in args_keys:
-        text_for_key = 'Link ' + key + 's:\n'
-        if key == 'class':
-            text_for_key = 'Link ' + key + 'es:\n'
-        links_ls_with_key = list(filter(lambda x: key in x.keys(), links_ls))
-        if links_ls_with_key:
-            text_for_key += ', '.join([link[key] for link in links_ls_with_key])
-            links_text_key_list.append(text_for_key)
-
-    links_str = '\n'.join([str(link) for link in links_text_key_list])  # <delete>
-    #html_elements += f"Links: \n{links_str}\n"  # f"Links: \n{links_ls}\n"
-    html_elements += f"{links_str}\n"
-
-    html_elements.strip()
-
-    if max_length:
-        html_elements = truncate_text(html_elements, max_length=max_length)
-
-    logger.debug(
-        f"HTML elements extracted successfully. - Number of Elements: {len(html_elements.splitlines())} - Number of Characters: {len(html_elements)}")
-
-    return html_elements
+    return html_elements[:max_length] if max_length else html_elements
 
 
 def html_extract_links(html_path: str) -> str:
