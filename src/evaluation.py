@@ -58,7 +58,8 @@ def calculate_success_rate(generated_code: str):
     pass
     # try to run genrated playwrigth code and if successfull then true 1 as success rate
 
+
 #TODO: Implement calculate_levenshtein_distance
-def calculate_levensthein_distance(generated_code, validation_code):
+def calculate_levenshtein_distance(generated_code, validation_code):
     pass
     # return the levenshtein distance between the generated code and the validation code
