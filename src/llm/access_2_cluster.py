@@ -70,7 +70,7 @@ class Access2Cluster:
         await self.page.get_by_role("menuitem", name="Delete Del").click()
         await self.page.get_by_role("button", name="Delete").click()
 
-        output_file = open("output.txt", "r")
+        output_file = open("output.txt", "r", encoding="utf-8")
         output = output_file.read()
         output_file.close()
         os.remove("output.txt")
