@@ -156,8 +156,33 @@ catboost_info/
 .LSOverride
 
 # Playwright test
-node_modules/
-/test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# TypeScript tests
+*.test.ts
+*.spec.ts
+/test-results/
+coverage/
+
+# Ignore build artifacts
+build/
+dist/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional npm cache directory
+.npm
+.npmrc
+
+# JSON files
+*.json
+
+# PNG images
+*.png
+
+# PNG images
+*.html

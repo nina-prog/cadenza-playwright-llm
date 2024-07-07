@@ -64,5 +64,5 @@ else:
     # Write the modified script back to the file
     with open(TEST_SCRIPT, 'w') as file:
         file.writelines(script_content)
-
+    print(TEST_SCRIPT)
     os.system(f"npx playwright test {TEST_SCRIPT}")
