@@ -25,3 +25,21 @@ def clean_string(input_string):
     cleaned_string = re.sub(r'[\r\n]+', ' ', stripped_string)
 
     return cleaned_string
+
+
+def strip_code_fence(code_block: str, programming_language: str) -> str:
+    """ Strip the code block from the generated text.
+
+    :param code_block: The generated text.
+    :param programming_language: The programming language of the code.
+    :return: The code block.
+    """
+    start_delim = "```" + programming_language
+    end_delim = "```"
+
+    start_index = code_block.find(start_delim)
+    end_index = code_block.rfind(end_delim)
+    if start_index == -1 or end_index == -1 or end_index <= start_index:
+        raise ValueError("Invalid or missing code block delimiters")
+
+    return code_block[start_index + len(start_delim):end_index].strip()

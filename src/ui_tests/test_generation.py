@@ -1,7 +1,9 @@
 """ This script generates the UI tests using LLMs. """
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
-from src.llm.access_2_cluster import Access2Cluster
 import os
+from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+from src.llm.access_2_cluster import Access2Cluster
+from src.utils.helpers import strip_code_fence
 
 from src.utils.logger import setup_logger
 
@@ -54,14 +56,7 @@ def generate_code(combined_input: str, file_name: str, model_name="gpt2") -> str
     generated_text = generated_text.encode('utf-8').decode('utf-8')
 
     # Extract the code block from the generated text
-    start_delim = "```"
-    end_delim = "```"
-
-    start_index = generated_text.find(start_delim)
-    end_index = generated_text.rfind(end_delim)
-    if start_index == -1 or end_index == -1 or end_index <= start_index:
-        raise ValueError("Invalid or missing code block delimiters")
-    generated_text = generated_text[start_index + len(start_delim):end_index].strip()
+    generated_text = strip_code_fence(generated_text, 'javascript')
 
     # Save the generated code to a new file
     save_code_to_file(generated_text, file_name, '.py')
@@ -80,14 +75,7 @@ async def generate_code_on_cluster(input_model, file_name: str, model: Access2Cl
     generated_text = await model.run_inference(input_model)
 
     # Extract the code block from the generated text
-    start_delim = "```"
-    end_delim = "```"
-
-    start_index = generated_text.find(start_delim)
-    end_index = generated_text.rfind(end_delim)
-    if start_index == -1 or end_index == -1 or end_index <= start_index:
-        raise ValueError("Invalid or missing code block delimiters")
-    generated_text = generated_text[start_index + len(start_delim):end_index].strip()
+    generated_text = strip_code_fence(generated_text, 'javascript')
 
     # Save the generated code to a new file
     save_code_to_file(generated_text, file_name, '.ts')
