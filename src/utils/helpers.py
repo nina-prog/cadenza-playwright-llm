@@ -9,7 +9,7 @@ def truncate_text(text: str, max_length: int) -> str:
     :param max_length: The maximum length of the text.
     :return: The truncated text.
     """
-    return text[:max_length] + (text[max_length:] and '...')
+    return text[:max_length] + (text[max_length:] and '\n...(truncated)')
 
 
 def clean_string(input_string):
