@@ -2,7 +2,7 @@ from nltk.translate.bleu_score import sentence_bleu
 import esprima
 
 
-def calculate_scores(generated_code: str, validation_code: str, precondition_code: str, programming_language: str) \
+def calculate_scores(generated_code: str, validation_code: str, precondition_code: str) \
         -> dict:
     """ This method returns the scores of the given generated code.
 

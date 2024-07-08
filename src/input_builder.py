@@ -27,6 +27,8 @@ def create_input(html_text: str, precondition_text: str, image_text: Union[str, 
     )
     if model_type == 'text_based':
         data_prompt += "### Screenshot Description:\n" + f"{image_text}\n\n"
+    if model_type == 'multimodal':
+        data_prompt += "### Screenshot:\n <image>\n\n"
 
     context_prompt = (
         "### Task:\n"

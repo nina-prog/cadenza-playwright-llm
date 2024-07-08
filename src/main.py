@@ -67,7 +67,7 @@ async def main_cluster(html_path: str, image_path: str, precondition_path: str, 
     logger.info("Context loaded successfully.")
 
     logger.info("Creating input prompt...")
-    input = create_input(html_text, precondition_text, description, None, model_type='multimodal')
+    input = create_input(html_text, precondition_text, None, description, model_type='multimodal')
     logger.info("Input prompt created successfully.")
     logger.debug(f"Input prompt:\n{input}")
 
