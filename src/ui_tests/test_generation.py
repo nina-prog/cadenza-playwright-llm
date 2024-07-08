@@ -79,9 +79,6 @@ async def generate_code_on_cluster(input_model, file_name: str, model: Access2Cl
     """
     generated_text = await model.run_inference(input_model)
 
-    # Encode to handle special characters
-    generated_text = generated_text.encode('utf-8').decode('utf-8')
-
     # Extract the code block from the generated text
     start_delim = "```"
     end_delim = "```"
