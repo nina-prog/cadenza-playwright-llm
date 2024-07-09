@@ -21,13 +21,13 @@ os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 # Iterate over all test scripts in the specified directory
 for root, _, files in os.walk(TEST_DIR):
     for file in files:
-        # if file != "27_2.spec.ts":
-        #     print(file)
+        # if file != "10_3.spec.ts":
+        #     #print(file)
         #     continue
         if file.endswith('.spec.ts'):
             test_script_path = os.path.join(root, file)
             file_name = os.path.splitext(file)[0]
-            print(file_name)
+            #print(file_name)
             screenshot_path = os.path.join(SCREENSHOT_DIR, file_name + ".png")
             # html_path = os.path.join(HTML_DIR, file_name + ".html")
             
@@ -38,6 +38,8 @@ for root, _, files in os.walk(TEST_DIR):
 
             # Specify code to take screenshot and extract HTML
             screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
+            time_out = 30000
+            time_out_code = f"  test.setTimeout({time_out});\n"
             # html_extraction_command = (
             #     '  const page_content = await page.content();\n'
             #     '  const fs = require("fs");\n'
@@ -52,11 +54,19 @@ for root, _, files in os.walk(TEST_DIR):
             # Read and modify the Playwright script
             with open(test_script_path, 'r') as file:
                 script_content = file.readlines()
-            
+            #
+            #print(script_content)
             original_script_content = copy.deepcopy(script_content)
 
             # Find the position to insert the screenshot command
             insert_position = 0
+            for i, line in enumerate(script_content):
+                if 'async' in line and 'test(' in line:
+                    insert_position = i + 1
+                    break
+
+            # Insert the timeout code and screenshot command
+            script_content.insert(insert_position, time_out_code)
             found_position = 0
             last_await_position = 0
             for i, line in enumerate(script_content):
@@ -77,7 +87,7 @@ for root, _, files in os.walk(TEST_DIR):
             # Write the modified script back to the file
             with open(test_script_path, 'w') as file:
                 file.writelines(script_content)
-            
+            #print(script_content)
             # Run the Playwright test
             os.system(f"npx playwright test {test_script_path}")
 
