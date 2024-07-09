@@ -1,6 +1,8 @@
 """ This module contains functions to process HTML files. """
 from bs4 import BeautifulSoup
 from typing import Union
+import json
+from collections import defaultdict
 
 from src.utils.helpers import truncate_text, clean_string
 from src.utils.logger import setup_logger
@@ -33,26 +35,46 @@ def parse_html(html_path: str, max_length: int = 200) -> str:
     return html_text
 
 
-def extract_elements(soup: BeautifulSoup, tag: str, attributes: list, key_checks: list, max_item_length: int = 40) -> list:
+def extract_elements(file_path: str, tag: str, attributes: list, key_checks: list, max_attr_length: int = 40) -> list:
     """
     Extracts and cleans specified attributes from an HTML element and filters elements based on key_checks.
 
-    :param soup: BeautifulSoup object containing the parsed HTML.
+    :param file_path: The path to the HTML file.
     :param tag: The HTML tag to search for.
     :param attributes: The list of attributes to extract from each tag.
     :param key_checks: The list of keys to check for inclusion in the final list.
-    :param max_item_length: The maximum length of each attribute's value.
+    :param max_attr_length: The maximum length of each attribute's value.
     :return: A list of dictionaries containing the filtered attributes of the elements.
     """
-    elements_ls = []
-    for element in soup.find_all(tag):
-        attrs_filtered = {
-            attr: clean_string(element.get(attr)) if attr != 'class' else ' '.join(element.get(attr, []))
-            for attr in attributes if element.get(attr) and len(element.get(attr)) < max_item_length
+    with open(file_path, 'r', encoding='utf-8') as file:
+        html_content = file.read()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+    elements = soup.find_all(tag)
+    logger.debug(f"Found {len(elements)} {tag} elements.")
+
+    elements_filtered = []
+    for element in elements:
+        attrs = {
+            attr: element.text if attr == 'text' else element.get(attr) for attr in attributes
         }
+        # Filter out None values
+        attrs = {k: v for k, v in attrs.items() if v}
+        # Clean extracted strings and join class attributess
+        attrs_cleaned = {k: clean_string(v) if k != 'class' else ' '.join(v) for k, v in attrs.items()}
+        # Filter out empty strings
+        attrs_filtered = {k: v for k, v in attrs_cleaned.items() if v != ''}
+        # Remove keys with too long attributes
+        keys_to_delete = [k for k, v in attrs_filtered.items() if len(v) > max_attr_length]
+        for k in keys_to_delete:
+            del attrs_filtered[k]
+        # Remove elements that don't have any of the key_checks
         if any(attrs_filtered.get(key) for key in key_checks):
-            elements_ls.append(attrs_filtered)
-    return elements_ls
+            elements_filtered.append(attrs_filtered)
+
+    logger.debug(f"Extracted {len(elements_filtered)} {tag} elements.")
+
+    return elements_filtered
 
 
 def format_elements(elements_ls: list, element_type: str, concat_mod: str = 'single') -> str:
@@ -61,14 +83,25 @@ def format_elements(elements_ls: list, element_type: str, concat_mod: str = 'sin
         return ""
 
     if concat_mod == 'single':
-        elements_str = ', \n'.join([str(element) for element in elements_ls])
+        elements_str = '\n'.join(json.dumps(element, ensure_ascii=False) for element in elements_ls)
         return f"{element_type}s: \n{elements_str}\n"
 
     elif concat_mod == 'all':
-        combined_args = {f"{element_type} {k}{'es' if k == 'class' else 's'}": ', '.join(element[k] for element in elements_ls)
-                         for k in elements_ls[0].keys()}
-        combined_args_str = ', \n'.join([f"{k}: {v}" for k, v in combined_args.items()])
-        return f"{element_type}s: \n{combined_args_str}\n"
+        # Initialize defaultdict with list
+        combined_attr = defaultdict(list)
+
+        # Populate the defaultdict
+        for element in elements_ls:
+            for k, v in element.items():
+                combined_attr[k].append(v)
+
+        # Convert lists to comma-separated strings and format output
+        combined_attrs_str = '\n'.join(
+            f"{element_type} {k}s: {', '.join(v)}" if k != 'class' else f"{element_type} {k}es: {', '.join(v)}"
+            for k, v in combined_attr.items()
+        )
+
+        return f"{element_type}s: \n{combined_attrs_str}\n"
 
 
 def extract_html_info(file_path: str, max_length: Union[int, None] = None, max_attr_length: int = 40,
@@ -82,21 +115,22 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = None, max_a
     :param concat_mod: The mode of concatenation ('single' or 'all').
     :return: A formatted string containing the extracted HTML elements.
     """
-    with open(file_path, 'r', encoding='utf-8') as file:
-        html_content = file.read()
-
-    soup = BeautifulSoup(html_content, 'html.parser')
-
-    buttons_ls = extract_elements(soup, 'button', ['text', 'id', 'class', 'name'], ['text', 'id'], max_attr_length)
-    inputs_ls = extract_elements(soup, 'input', ['id', 'class', 'name', 'aria-label', 'type', 'placeholder'],
-                                 ['name', 'id', 'aria-label'], max_attr_length)
-    links_ls = extract_elements(soup, 'a', ['text', 'id', 'class'], ['text', 'id'], max_attr_length)
+    buttons_ls = extract_elements(file_path, tag='button', attributes=['text', 'id', 'class', 'name'],
+                                  key_checks=['text', 'id', 'name'], max_attr_length=max_attr_length)
+    inputs_ls = extract_elements(file_path, tag='input',
+                                 attributes=['id', 'class', 'name', 'aria-label', 'type', 'placeholder'],
+                                 key_checks=['id', 'name', 'aria-label'], max_attr_length=max_attr_length)
+    links_ls = extract_elements(file_path, tag='a', attributes=['text', 'id', 'class'], key_checks=['text', 'id'],
+                                max_attr_length=max_attr_length)
 
     html_elements = format_elements(buttons_ls, 'Button', concat_mod)
     html_elements += format_elements(inputs_ls, 'Input', concat_mod)
     html_elements += format_elements(links_ls, 'Link', concat_mod)
 
-    return html_elements[:max_length] if max_length else html_elements
+    if max_length:
+        html_elements = truncate_text(html_elements, max_length)
+
+    return html_elements
 
 
 def html_extract_links(html_path: str) -> str:
