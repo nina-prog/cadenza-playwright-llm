@@ -2,12 +2,14 @@ import sys
 import os
 import asyncio
 import re
+import copy
 
 print(f"Current WD: {os.getcwd()}")
 
 ####################################
 ## Script to take images etc from
-TEST_SCRIPT = "./test_script/000_test.spec.ts"
+TEST_SCRIPT = "./test_script/_test.spec.ts"
+# TEST_SCRIPT = "./test_script/1_2.spec.ts"
 
 SCREENSHOT = "./screenshots_expected_results/"
 HTML = "./html_expected_results/"
@@ -41,7 +43,7 @@ else:
     # Read and modify the Playwright script
     with open(TEST_SCRIPT, 'r') as file:
         script_content = file.readlines()
-
+    original = copy.deepcopy(script_content)
     # Find the position to insert the screenshot command
     insert_position = 0
     found_position = 0
@@ -65,4 +67,9 @@ else:
     with open(TEST_SCRIPT, 'w') as file:
         file.writelines(script_content)
     print(TEST_SCRIPT)
+
     os.system(f"npx playwright test {TEST_SCRIPT}")
+
+    print(original)
+    with open(TEST_SCRIPT, 'w') as file:
+        file.writelines(original)
