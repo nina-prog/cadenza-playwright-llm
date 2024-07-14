@@ -12,6 +12,7 @@ def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = '../data/raw/test_s
     :param perc_val: Percentage of the validation data of the training subset
     :param seed: Random seed
     :param dir: Directory to the script files
+    :return: lists of Ids for the 3 categories and information regarding the test steps
     """
     if not os.path.isdir(dir):
         logger.info("Directory is missing. Presumably given wrong path")
@@ -50,6 +51,7 @@ def balance_tests(ids_train, ids_test, ids_val, perc_test, perc_val, ts_list, te
     :param perc_val: Percentage of the validation data of the training subset
     :param ts_list: List of all test steps
     :param test_steps: Number of test steps
+    :return: The balanced id lists and a flag to show if something has been altered
     """
     trigger_flag = False
 
@@ -126,6 +128,7 @@ def balanced_train_val_test_split(perc_test=0.2, perc_val=0.2, balanced=True):
     :param perc_val: Percentage of the test data of all data
     :param perc_test: Percentage of the test data of all data
     :param balanced: Boolean to balance the test case split based on the amount of underlying test steps
+    :return: 3 Lists of test case Ids; Training, Validation and Test.
     """
 
     ids_train, ids_val, ids_test, ts_list, steps = triple_split(perc_val, perc_test, seed=17, dir = '../data/raw/test_script')
