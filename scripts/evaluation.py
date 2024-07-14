@@ -47,7 +47,7 @@ def evaluate_test_cases():
     df = pd.DataFrame(test_ids, columns=["file_id"])
     for metric in agg_scores.keys():
         df[metric] = agg_scores[metric]
-    timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M")
+    timestamp = pd.Timestamp.now().strftime("%Y%m%d-%H%M")
     filepath = path_prefix + cfg["paths"]["scores_dir"] + f"/eval_scores_{timestamp}.pkl"
     df.to_pickle(filepath)
     logger.info(f"Results saved to {filepath}")
