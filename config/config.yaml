@@ -1,0 +1,58 @@
+# PATH SETTINGS FROM PROJECT ROOT
+paths:
+  prediction_dir: "./data/prediction/pred_test_script/"
+  model_dir: "./models/"
+  processed_data_dir: "./data/processed/"
+  raw_data_dir: "./data/raw/"
+  external_data_dir: "./data/external/"
+  scores_dir: "./data/scores/"
+
+# DATA LOADER SETTINGS
+dataloading:
+  screenshot_dir: "./data/raw/screenshot/"
+  html_dir: "./data/raw/html/"
+  test_script_dir: "./data/raw/test_script/"
+
+# PREPROCESSING SETTINGS
+preprocessing:
+  html:
+    concat_mode: "single"
+    max_attr_length: 100
+
+# INPUT SETTINGS
+input_settings:
+  model_type: "multimodal" # or 'text_based'
+  template_name: "template_1"
+  include_html: True
+  include_screenshot: True
+  # precondition always set to True as a baseline
+
+# TEMPLATES
+templates:
+  - name: "template_1"
+    base_context_prompt: |
+      ### Task:
+      You are a test automation script writer. I will describe a UI test in German and you will generate Playwright test code for the given webpage. Strictly follow these instructions:
+      1. Don't explain the code, just generate the code block itself.
+      2. You get some HTML elements and its attributes from the website. You can use playwright locators to find the elements by their attributes.
+      3. Use the precondition code to set up the initial state. You must continue the code.
+      4. Follow the steps in the ui test description to perform actions on the website.
+    text_based_addition: "5. Use the screenshot description to understand the context of the test.\n"
+    multimodal_addition: "5. Use the screenshot to understand the context of the test.\nAssistant: "
+  - name: "template_2"
+    base_context_prompt: |
+      ### Task:
+      Follow the steps in the ui test description to perform actions on the website. Generate Playwright test code for the given webpage and teh actions.
+      Don't explain the code, just generate the code block itself. You must continue the given precondition test code.
+    multimodal_addition: "\nAssistant: "
+
+# TBD - ARCHITECTURE SETTINGS
+architecture:
+  latent_dims: 8
+  beta: 0.01
+  dropout_rate: 0.0
+
+# TBD - FINETUNING / FITTING SETTINGS
+fitting:
+  epochs: 128
+  batch_size: 4

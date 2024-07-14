@@ -2,7 +2,7 @@
 import os
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
 
-from src.llm.access_2_cluster import Access2Cluster
+from src.models.llm.access_2_cluster import Access2Cluster
 from src.utils.helpers import strip_code_fence
 
 from src.utils.logger import setup_logger

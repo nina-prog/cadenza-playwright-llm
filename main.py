@@ -3,7 +3,7 @@ from src.data.code_processor import parse_code
 from src.data.image_processor import extract_text_from_image
 from src.input_builder import create_input
 from src.ui_tests.test_generation import generate_code, generate_code_on_cluster
-from src.evaluation import calculate_scores
+from src.evaluation.metrics import calculate_scores
 
 import logging
 from src.utils.logger import setup_logger
@@ -15,7 +15,7 @@ MAX_LENGTH = 300  # Maximum length of the input texts for the LLM
 
 
 def main(html_path: str, image_path: str, precondition_path: str, description: str, validation_path: str = None):
-    """Generate the test case for the next UI test.
+    """Predict a UI test case with an LLM with given context as input (HTML, image, precondition, description).
 
     :param html_path: The path to the HTML file.
     :param image_path: The path to the image file.
@@ -43,15 +43,15 @@ def main(html_path: str, image_path: str, precondition_path: str, description: s
     logger.info(f"Test case generated for {next_id}.")
 
     if validation_path:
-        validation_code = parse_code(validation_path)
-        scores = calculate_scores(generated_code=generated_code, validation_code=validation_code,
-                                  precondition_code=precondition_text)
+        test_case = {"generated_code": generated_code, "validation_code": parse_code(validation_path), "precondition_code": precondition_text}
+        scores = calculate_scores(test_cases=[test_case])
+
         return scores
 
 
 async def main_cluster(html_path: str, image_path: str, precondition_path: str, description: str,
                        validation_path: str = None, model=None):
-    """Generate the test case for the next UI test.
+    """Predict a UI test case using a multimodal LLM with given context as input (HTML, image, precondition, description).
 
     :param html_path: The path to the HTML file.
     :param image_path: The path to the image file.
@@ -81,10 +81,9 @@ async def main_cluster(html_path: str, image_path: str, precondition_path: str, 
     logger.info(f"Test case generated for {next_id}.")
 
     if validation_path:
-        validation_code = parse_code(validation_path)
-        scores = calculate_scores(generated_code=generated_code, validation_code=validation_code, precondition_code=precondition_text)
+        test_case = {"generated_code": generated_code, "validation_code": parse_code(validation_path), "precondition_code": precondition_text}
+        scores = calculate_scores(test_cases=[test_case])
+
         return scores
 
-
-if __name__ == "__main__":
-    main()
+# TODO: Add main function to run the script
