@@ -6,13 +6,16 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__, level='INFO')
 
 
-def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir='../data/raw/test_script'):
+def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = '../data/raw/test_script'):
     """ Split the original data in test, train and validation
     :param perc_test: Percentage of the test data of all data
     :param perc_val: Percentage of the validation data of the training subset
     :param seed: Random seed
     :param dir: Directory to the script files
     """
+    if not os.path.isdir(dir):
+        logger.info("Directory is missing. Presumably given wrong path")
+
     test_steps = (
         len([name for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name)) and name != '.gitkeep']))
     # Lists for all test cases and all test steps
@@ -124,8 +127,8 @@ def balanced_train_val_test_split(perc_test=0.2, perc_val=0.2, balanced=True):
     :param perc_test: Percentage of the test data of all data
     :param balanced: Boolean to balance the test case split based on the amount of underlying test steps
     """
-    ids_train, ids_val, ids_test, ts_list, steps = triple_split(perc_val=0.2, perc_test=0.2, seed=17,
-                                                                dir='../data/raw/test_script')
+
+    ids_train, ids_val, ids_test, ts_list, steps = triple_split(perc_val, perc_test, seed=17, dir = '../data/raw/test_script')
 
     trigger_flag = True
     dl_timer = time.process_time()  # Sollte eig. nicht vorkommen können, dient der Absicherung
