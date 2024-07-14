@@ -1,5 +1,39 @@
 """ Helper functions for the application. """
+import argparse
 import re
+from src.data.data_loading import load_config
+
+from src.utils.logger import setup_logger
+
+logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
+
+
+def parse_args():
+    """
+    Function that parses the arguments.
+
+    :return: Parsed arguments
+    """
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--config", help="Path to the config file", type=str, default="../config/config.yaml")
+    args = parser.parse_args()
+
+    return args
+
+
+def parse_config(args):
+    """
+    Parses the config file, given the arguments.
+
+    :param args: Parsed arguments
+    :return: dict: parsed config file, str: path to the config file
+    """
+    # Load config file
+    cfg = load_config(args.config)
+    cfg_path = args.config
+
+    return cfg, cfg_path
 
 
 def truncate_text(text: str, max_length: int) -> str:
@@ -43,3 +77,16 @@ def strip_code_fence(code_block: str, programming_language: str) -> str:
         raise ValueError("Invalid or missing code block delimiters")
 
     return code_block[start_index + len(start_delim):end_index].strip()
+
+
+def get_key_or_default(dictionary: dict, key: str, default: any) -> any:
+    """ Get a value from a dictionary by key or return a default value if the key is not present.
+
+    :param dictionary: The dictionary to get the value from.
+    :param key: The key to get the value for.
+    :param default: The default value to return if the key is not present.
+    :return: The value for the key or the default value if the key is not present.
+    """
+    if key not in dictionary:
+        logger.info(f"'{key}' not defined. Using default: {default}")
+    return dictionary.get(key, default)
