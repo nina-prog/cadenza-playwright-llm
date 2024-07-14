@@ -5,7 +5,7 @@ paths:
   processed_data_dir: "./data/processed/"
   raw_data_dir: "./data/raw/"
   external_data_dir: "./data/external/"
-  scores_dir: "./data/scores"
+  scores_dir: "./data/scores/"
 
 # DATA LOADER SETTINGS
 dataloading:

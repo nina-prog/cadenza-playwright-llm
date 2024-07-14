@@ -16,9 +16,7 @@ def evaluate_test_cases():
     args = parse_args()
     cfg, cfg_path = parse_config(args)
 
-    # Set path prefix
-    path_prefix = "../"
-    pred_dir = path_prefix + cfg["paths"]["prediction_dir"]
+    pred_dir = cfg["paths"]["prediction_dir"]
 
     logger.info("Calculating scores...")
 
@@ -31,8 +29,8 @@ def evaluate_test_cases():
             prev_id = f"{current_test}_{int(current_step) - 1}"
             test_case = {
                 "generated_code": parse_code(pred_dir + file),
-                "validation_code": parse_code(path_prefix + cfg['dataloading']['test_script_dir'] + f"{current_id}.spec.ts"),
-                "precondition_code": parse_code(path_prefix + cfg['dataloading']['test_script_dir'] + f"{prev_id}.spec.ts")
+                "validation_code": parse_code(cfg['dataloading']['test_script_dir'] + f"{current_id}.spec.ts"),
+                "precondition_code": parse_code(cfg['dataloading']['test_script_dir'] + f"{prev_id}.spec.ts")
             }
             test_cases.append(test_case)
             test_ids.append(current_id)
@@ -43,12 +41,16 @@ def evaluate_test_cases():
     agg_scores = aggregate_scores(scores)
     logger.info(f"Aggregated scores: {agg_scores}")
 
-    # Save results as pickle
+    # To pickle
     df = pd.DataFrame(test_ids, columns=["file_id"])
+    df["test_case"] = [f"{test_id.split('_')[0]}" for test_id in test_ids]
+    df["test_step"] = [f"{test_id.split('_')[1]}" for test_id in test_ids]
     for metric in agg_scores.keys():
         df[metric] = agg_scores[metric]
+
+    # Save to file
     timestamp = pd.Timestamp.now().strftime("%Y%m%d-%H%M")
-    filepath = path_prefix + cfg["paths"]["scores_dir"] + f"/eval_scores_{timestamp}.pkl"
+    filepath = cfg["paths"]["scores_dir"] + f"/eval_scores_{timestamp}.pkl"
     df.to_pickle(filepath)
     logger.info(f"Results saved to {filepath}")
 
