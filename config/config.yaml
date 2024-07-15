@@ -16,8 +16,10 @@ dataloading:
 # PREPROCESSING SETTINGS
 preprocessing:
   html:
-    concat_mode: "single"
+    concat_mod: "single"
     max_attr_length: 100
+  image:
+    max_length: 100
 
 # INPUT SETTINGS
 input_settings:
@@ -29,7 +31,7 @@ input_settings:
 
 # TEMPLATES
 templates:
-  - name: "template_1"
+  template_1:
     base_context_prompt: |
       ### Task:
       You are a test automation script writer. I will describe a UI test in German and you will generate Playwright test code for the given webpage. Strictly follow these instructions:
@@ -39,12 +41,13 @@ templates:
       4. Follow the steps in the ui test description to perform actions on the website.
     text_based_addition: "5. Use the screenshot description to understand the context of the test.\n"
     multimodal_addition: "5. Use the screenshot to understand the context of the test.\nAssistant: "
-  - name: "template_2"
+  template_2:
     base_context_prompt: |
       ### Task:
-      Follow the steps in the ui test description to perform actions on the website. Generate Playwright test code for the given webpage and teh actions.
+      Follow the steps in the ui test description to perform actions on the website. Generate Playwright test code for the given webpage and the actions.
       Don't explain the code, just generate the code block itself. You must continue the given precondition test code.
     multimodal_addition: "\nAssistant: "
+
 
 # TBD - ARCHITECTURE SETTINGS
 architecture:
