@@ -40,7 +40,7 @@ def aggregate_scores(scores: dict) -> dict:
     return agg_scores
 
 
-def calculate_scores(test_cases: List[dict], metrics=None) -> dict:
+def calculate_scores(test_cases: List[dict], test_name, metrics=None) -> dict:
     """Calculate scores for given metrics across multiple test cases.
 
     :param test_cases: List of dictionaries, each containing 'generated_code', 'validation_code',
@@ -64,7 +64,9 @@ def calculate_scores(test_cases: List[dict], metrics=None) -> dict:
                     case 'weighted bleu':
                         scores[metric].append(calculate_weighted_bleu_score(generated_code, validation_code, precondition_code))
                     case 'success rate':
-                        scores[metric].append(calculate_success_rate(generated_code))
+                        file_name = test_name + ".spec"
+                        screen_shot_dir = "./run_test_prediction/"
+                        scores[metric].append(calculate_success_rate(generated_code, file_name=file_name, screen_shot_dir=screen_shot_dir))
                     case 'levenshtein distance':
                         scores[metric].append(calculate_levenshtein_distance(generated_code, validation_code))
                     case _:
