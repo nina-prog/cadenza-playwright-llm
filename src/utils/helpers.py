@@ -90,3 +90,21 @@ def get_key_or_default(dictionary: dict, key: str, default: any) -> any:
     if key not in dictionary:
         logger.info(f"'{key}' not defined. Using default: {default}")
     return dictionary.get(key, default)
+
+
+def get_previous_id(id: str) -> str:
+    """Get the ID of the previous step of a test case.
+
+    :param id: The ID of the current step.
+    :return: The ID of the previous step, or an empty string if invalid.
+    """
+    try:
+        test, step = map(int, id.split('.'))
+        if step > 1:
+            return f"{test}.{step - 1}"
+        else:
+            logger.warning(f"Test {test} has no previous step. Cannot retrieve ID.")
+            return ""
+    except ValueError:
+        logger.error(f"Invalid ID format: {id}")
+        return ""
