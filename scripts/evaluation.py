@@ -11,11 +11,12 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__, level="INFO")  # Change to DEBUG for more verbosity
 
 
-def evaluate_test_cases():
-    # Parse arguments and config
-    args = parse_args()
-    cfg, cfg_path = parse_config(args)
+def evaluate_test_cases(cfg: dict) -> pd.DataFrame:
+    """Evaluate multiple generated test cases and save the results to a file.
 
+    :param cfg: The configuration dictionary.
+    :return: The results as a pandas DataFrame.
+    """
     pred_dir = cfg["paths"]["prediction_dir"]
 
     logger.info("Calculating scores...")
@@ -50,7 +51,7 @@ def evaluate_test_cases():
 
     # Save to file
     timestamp = pd.Timestamp.now().strftime("%Y%m%d-%H%M")
-    filepath = cfg["paths"]["scores_dir"] + f"/eval_scores_{timestamp}.pkl"
+    filepath = cfg["paths"]["scores_dir"] + f"eval_scores_{timestamp}.pkl"
     df.to_pickle(filepath)
     logger.info(f"Results saved to {filepath}")
 
@@ -58,4 +59,10 @@ def evaluate_test_cases():
 
 
 if __name__ == "__main__":
-    evaluate_test_cases()
+
+    # Parse arguments and config
+    args = parse_args()
+    cfg, cfg_path = parse_config(args)
+
+    # Evaluate test cases
+    evaluate_test_cases(cfg)
