@@ -50,7 +50,7 @@ def evaluate_test_cases(cfg: dict) -> pd.DataFrame:
         df[metric] = agg_scores[metric]
 
     # Save to file
-    timestamp = pd.Timestamp.now().strftime("%Y%m%d-%H%M")
+    timestamp = pd.Timestamp.now().strftime("%Y%m%d-%H%M%S")
     filepath = cfg["paths"]["scores_dir"] + f"eval_scores_{timestamp}.pkl"
     df.to_pickle(filepath)
     logger.info(f"Results saved to {filepath}")
