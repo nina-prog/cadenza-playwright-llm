@@ -82,7 +82,7 @@ async def main_cluster(html_path: str, image_path: str, precondition_path: str, 
 
     if validation_path:
         test_case = {"generated_code": generated_code, "validation_code": parse_code(validation_path), "precondition_code": precondition_text}
-        scores = calculate_scores(test_cases=[test_case])
+        scores = calculate_scores(test_cases=[test_case], test_name=next_id)
 
         return scores
 

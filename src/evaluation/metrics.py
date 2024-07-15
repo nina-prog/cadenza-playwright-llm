@@ -72,6 +72,13 @@ def calculate_scores(test_cases: List[dict], test_name, metrics=None) -> dict:
                         file_name = test_name + ".spec"
                         screen_shot_dir = "./run_test_prediction/"
                         scores[metric].append(calculate_success_rate(generated_code, file_name=file_name, screen_shot_dir=screen_shot_dir))
+                    case 'similarity':
+                        file_name = test_name + ".spec"
+                        screen_shot_dir_pred = "./run_test_prediction/"
+                        screen_shot_dir_gt = "./run_test_get/"
+                        pred_name = screen_shot_dir_pred + file_name + ".spec.ts"
+                        gt_name = screen_shot_dir_gt + file_name + ".spec.ts"
+                        scores[metric].append(encode_and_calculate_similarity(pred_name, gt_name, screen_shot_dir=screen_shot_dir))
                     case 'levenshtein distance':
                         scores[metric].append(calculate_levenshtein_distance(generated_code, validation_code))
                     case _:
@@ -154,7 +161,7 @@ def calculate_weighted_bleu_score(generated_code: str, validation_code: str, pre
     return (1 - alpha) * first_bleu_score + alpha * second_bleu_score
 
 
-# TODO: Implement calculate_success_rate
+
 def calculate_success_rate(generated_code: str, file_name, screen_shot_dir):
     # try to run genrated playwrigth code and if successfull then true 1 as success rate
     # Create directories for screenshots
