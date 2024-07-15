@@ -3,6 +3,11 @@ from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from Levenshtein import distance
 import esprima
 import os
+import torch
+import torchvision.transforms as transforms
+from PIL import Image
+from torchvision import models
+from torch.nn.functional import cosine_similarity
 
 from src.utils.logger import setup_logger
 
@@ -77,6 +82,34 @@ def calculate_scores(test_cases: List[dict], test_name, metrics=None) -> dict:
                 logger.error(f"Error calculating {metric} for test case: {e}")
 
     return scores
+
+def encode_and_calculate_similarity(image_path1, image_path2, model_name='resnet18'):
+    # Load a pre-trained model
+    model = getattr(models, model_name)(pretrained=True)
+    model.eval()
+
+    # Define a transformation to apply to the images
+    preprocess = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
+    # Load and preprocess the images
+    image1 = Image.open(image_path1)
+    image2 = Image.open(image_path2)
+    input_tensor1 = preprocess(image1).unsqueeze(0)  # Create a mini-batch as expected by the model
+    input_tensor2 = preprocess(image2).unsqueeze(0)
+
+    # Encode the images
+    with torch.no_grad():
+        embedding1 = model(input_tensor1)
+        embedding2 = model(input_tensor2)
+
+    # Calculate cosine similarity
+    cos_sim = cosine_similarity(embedding1, embedding2)
+    return cos_sim.item()
 
 
 def calculate_weighted_bleu_score(generated_code: str, validation_code: str, precondition_code: str,
