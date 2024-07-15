@@ -1,7 +1,7 @@
 """ This module contains functions to process code files. """
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level='DEBUG')  # Change to 'INFO' for less verbosity
+logger = setup_logger(__name__, level='INFO')  # Change to 'INFO' for less verbosity
 
 
 def parse_code(precondition_path: str) -> str:

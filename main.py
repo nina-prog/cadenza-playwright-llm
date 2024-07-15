@@ -1,22 +1,18 @@
-from src.data.html_processor import extract_html_info
 from src.data.code_processor import parse_code
-from src.data.image_processor import extract_text_from_image
-from src.input_builder import create_input
+from src.input_builder import create_input_prompt
 from src.ui_tests.test_generation import generate_code, generate_code_on_cluster
 from src.evaluation.metrics import calculate_scores
+from src.utils.helpers import parse_args, parse_config
+from src.data.data_loading import load_config
 
-import logging
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level=logging.DEBUG)  # Change to DEBUG for more verbosity
+logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
 
-# Constants
-MAX_LENGTH = 300  # Maximum length of the input texts for the LLM
-
-
-def main(html_path: str, image_path: str, precondition_path: str, description: str, validation_path: str = None):
+def main(html_path: str, image_path: str, precondition_path: str, description: str, config_file: str, validation_path: str = None):
     """Predict a UI test case with an LLM with given context as input (HTML, image, precondition, description).
 
+    :param config: The configuration dictionary.
     :param html_path: The path to the HTML file.
     :param image_path: The path to the image file.
     :param precondition_path: The path to the precondition file.
@@ -24,14 +20,11 @@ def main(html_path: str, image_path: str, precondition_path: str, description: s
     :param validation_path: The path to the validation file (for multimodal model).
     :return: Scores for the generated test case (if validation_path and model are provided).
     """
-    logger.info("Loading context...")
-    html_text = extract_html_info(html_path, concat_mod='single')
-    image_text = extract_text_from_image(image_path, max_length=MAX_LENGTH)
-    precondition_text = parse_code(precondition_path)
-    logger.info("Context loaded successfully.")
+    # Load configuration
+    cfg = load_config(config_file)
 
     logger.info("Creating input prompt...")
-    input = create_input(html_text, precondition_text, image_text, description, model_type='text_based')
+    input = create_input_prompt(html_path, image_path, precondition_path, description, config=cfg)
     logger.info("Input prompt created successfully.")
     logger.debug(f"Input prompt:\n{input}")
 
@@ -43,13 +36,15 @@ def main(html_path: str, image_path: str, precondition_path: str, description: s
     logger.info(f"Test case generated for {next_id}.")
 
     if validation_path:
-        test_case = {"generated_code": generated_code, "validation_code": parse_code(validation_path), "precondition_code": precondition_text}
-        scores = calculate_scores(test_cases=[test_case], test_name= next_id)
+        test_case = {"generated_code": generated_code,
+                     "validation_code": parse_code(validation_path),
+                     "precondition_code": parse_code(precondition_path)}
+        scores = calculate_scores(test_cases=[test_case])
 
         return scores
 
 
-async def main_cluster(html_path: str, image_path: str, precondition_path: str, description: str,
+async def main_cluster(html_path: str, image_path: str, precondition_path: str, description: str, config_file: str,
                        validation_path: str = None, model=None):
     """Predict a UI test case using a multimodal LLM with given context as input (HTML, image, precondition, description).
 
@@ -57,17 +52,16 @@ async def main_cluster(html_path: str, image_path: str, precondition_path: str, 
     :param image_path: The path to the image file.
     :param precondition_path: The path to the precondition file.
     :param description: The description of the test case to generate.
+    :param config_file: The path to the configuration file.
     :param validation_path: The path to the validation file (for multimodal model).
     :param model: The model to use (for multimodal model).
     :return: Scores for the generated test case (if validation_path is provided).
     """
-    logger.info("Loading context...")
-    html_text = extract_html_info(html_path, concat_mod='all')
-    precondition_text = parse_code(precondition_path)
-    logger.info("Context loaded successfully.")
+    # Load configuration
+    cfg = load_config(config_file)
 
     logger.info("Creating input prompt...")
-    input = create_input(html_text, precondition_text, None, description, model_type='multimodal')
+    input = create_input_prompt(html_path, image_path, precondition_path, description, config=cfg)
     logger.info("Input prompt created successfully.")
     logger.debug(f"Input prompt:\n{input}")
 
@@ -81,8 +75,10 @@ async def main_cluster(html_path: str, image_path: str, precondition_path: str, 
     logger.info(f"Test case generated for {next_id}.")
 
     if validation_path:
-        test_case = {"generated_code": generated_code, "validation_code": parse_code(validation_path), "precondition_code": precondition_text}
-        scores = calculate_scores(test_cases=[test_case], test_name=next_id)
+        test_case = {"generated_code": generated_code,
+                     "validation_code": parse_code(validation_path),
+                     "precondition_code": parse_code(precondition_path)}
+        scores = calculate_scores(test_cases=[test_case])
 
         return scores
 
