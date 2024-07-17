@@ -7,7 +7,7 @@ from collections import defaultdict
 from src.utils.helpers import truncate_text, clean_string
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level='DEBUG')  # Change to 'INFO' for less verbosity
+logger = setup_logger(__name__, level='INFO')  # Change to 'INFO' for less verbosity
 
 
 def parse_html(html_path: str, max_length: int = 200) -> str:
@@ -80,6 +80,7 @@ def extract_elements(file_path: str, tag: str, attributes: list, key_checks: lis
 def format_elements(elements_ls: list, element_type: str, concat_mod: str = 'single') -> str:
     """Formats extracted elements into a string based on concat_mod."""
     if not elements_ls:
+        logger.warning(f"No {element_type}s found.")
         return ""
 
     if concat_mod == 'single':
@@ -123,9 +124,15 @@ def extract_html_info(file_path: str, max_length: Union[int, None] = None, max_a
     links_ls = extract_elements(file_path, tag='a', attributes=['text', 'id', 'class'], key_checks=['text', 'id'],
                                 max_attr_length=max_attr_length)
 
-    html_elements = format_elements(buttons_ls, 'Button', concat_mod)
-    html_elements += format_elements(inputs_ls, 'Input', concat_mod)
-    html_elements += format_elements(links_ls, 'Link', concat_mod)
+    html_elements_list = []
+    if buttons_ls:
+        html_elements_list.append(format_elements(buttons_ls, 'Button', concat_mod))
+    if inputs_ls:
+        html_elements_list.append(format_elements(inputs_ls, 'Input', concat_mod))
+    if links_ls:
+        html_elements_list.append(format_elements(links_ls, 'Link', concat_mod))
+
+    html_elements = ''.join(html_elements_list)
 
     if max_length:
         html_elements = truncate_text(html_elements, max_length)
