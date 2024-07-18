@@ -16,8 +16,8 @@ dataloading:
 # PREPROCESSING SETTINGS
 preprocessing:
   html:
-    concat_mod: "single"
-    max_attr_length: 100
+    concat_mod: "all"
+    max_attr_length: 50
   image:
     max_length: 100
 
