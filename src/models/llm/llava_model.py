@@ -22,6 +22,12 @@ import requests
 import torch
 import re
 
+import sqlite3
+
+from main import main_cluster
+from src.data.database import fetch_relevant_items, map_items_to_args
+from src.data.data_loading import load_config
+
 
 class LLaVAModel:
 
@@ -139,3 +145,39 @@ class LLaVAModel:
             image = self.load_image(image_file)
             out.append(image)
         return out
+
+
+if __name__ == "__main__":
+    # Connect to the database
+    config = load_config("../config/config.yaml")
+
+    conn = sqlite3.connect('../data/raw/playwright_script.db')
+    cursor = conn.cursor()
+
+    res = cursor.execute("SELECT * FROM tests")
+    items = res.fetchall()
+
+    print("There are {} data.".format(len(items)))
+
+    args_init = {'model_path': "/pfs/data5/home/kit/tm/ge6778/PSDA/llava-v1.5-7b-finetune_lora-test-2_merged",
+                 'model_base': None,
+                 "sep": ",",
+                 "temperature": 0,
+                 "top_p": None,
+                 "num_beams": 1,
+                 "max_new_tokens": 512
+                 }
+
+    model = LLaVAModel(**args_init)
+
+    # TODO: Remove [1:3]
+    ids = [i[0] for i in items]
+
+    for current_id in ids:
+        relevant_items = fetch_relevant_items(cursor, current_id)
+        print(current_id)
+        print(relevant_items)
+        args = map_items_to_args(relevant_items, config)
+        print(args)
+        args['model'] = model
+        main_cluster(**args)
