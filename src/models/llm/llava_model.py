@@ -16,19 +16,22 @@ from llava.mm_utils import (
     get_model_name_from_path,
 )
 
-from pathlib import Path
 from PIL import Image
 from io import BytesIO
 import requests
 import torch
-import argparse
-import json
 import re
+
+import sqlite3
+
+from main import main_cluster
+from src.data.database import fetch_relevant_items, map_items_to_args
+from src.data.data_loading import load_config
 
 
 class LLaVAModel:
 
-    def __init__(self, model_path, model_base):
+    def __init__(self, model_path, model_base, sep, temperature, top_p, num_beams, max_new_tokens):
         disable_torch_init()
 
         self.model_name = get_model_name_from_path(model_path)
@@ -36,7 +39,13 @@ class LLaVAModel:
             model_path, model_base, self.model_name
         )
 
-    def run_inference(self, query, image_file, sep, temperature, top_p, num_beams, max_new_tokens):
+        self.sep = sep
+        self.temperature = temperature
+        self.top_p = top_p
+        self.num_beams = num_beams
+        self.max_new_tokens = max_new_tokens
+
+    def run_inference(self, query, image_file):
         qs = query
 
         # TODO: Remove?
@@ -80,7 +89,7 @@ class LLaVAModel:
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
 
-        image_files = self.image_parser(image_file, sep)
+        image_files = self.image_parser(image_file, self.sep)
         images = self.load_images(image_files)
         image_sizes = [x.size for x in images]
         images_tensor = process_images(
@@ -102,11 +111,11 @@ class LLaVAModel:
                 input_ids,
                 images=images_tensor,
                 image_sizes=image_sizes,
-                do_sample=True if temperature > 0 else False,
-                temperature=temperature,
-                top_p=top_p,
-                num_beams=num_beams,
-                max_new_tokens=max_new_tokens,
+                do_sample=True if self.temperature > 0 else False,
+                temperature=self.temperature,
+                top_p=self.top_p,
+                num_beams=self.num_beams,
+                max_new_tokens=self.max_new_tokens,
                 use_cache=True,
             )
 
@@ -136,3 +145,39 @@ class LLaVAModel:
             image = self.load_image(image_file)
             out.append(image)
         return out
+
+
+if __name__ == "__main__":
+    # Connect to the database
+    config = load_config("../config/config.yaml")
+
+    conn = sqlite3.connect('../data/raw/playwright_script.db')
+    cursor = conn.cursor()
+
+    res = cursor.execute("SELECT * FROM tests")
+    items = res.fetchall()
+
+    print("There are {} data.".format(len(items)))
+
+    args_init = {'model_path': "/pfs/data5/home/kit/tm/ge6778/PSDA/llava-v1.5-7b-finetune_lora-test-2_merged",
+                 'model_base': None,
+                 "sep": ",",
+                 "temperature": 0,
+                 "top_p": None,
+                 "num_beams": 1,
+                 "max_new_tokens": 512
+                 }
+
+    model = LLaVAModel(**args_init)
+
+    # TODO: Remove [1:3]
+    ids = [i[0] for i in items][1:3]
+
+    for current_id in ids:
+        relevant_items = fetch_relevant_items(cursor, current_id)
+        print(current_id)
+        print(relevant_items)
+        args = map_items_to_args(relevant_items, config)
+        print(args)
+        args['model'] = model
+        main_cluster(**args)
