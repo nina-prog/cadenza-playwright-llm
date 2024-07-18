@@ -18,7 +18,7 @@ def generate_json(db_file: str, config: dict, name:str)->None:
 
     ids = [i[0] for i in items]
 
-    tc_ids_train, tc_ids_val, tc_ids_test = balanced_train_val_test_split()
+    tc_ids_train, tc_ids_val, tc_ids_test = balanced_train_val_test_split(perc_test=0.2, perc_val=0.2)
 
     logger.debug("Train: ", tc_ids_train, "\nVal: ", tc_ids_val, "\nTest: ", tc_ids_test)
 
