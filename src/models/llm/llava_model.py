@@ -171,7 +171,7 @@ if __name__ == "__main__":
     model = LLaVAModel(**args_init)
 
     # TODO: Remove [1:3]
-    ids = [i[0] for i in items]
+    ids = [i[0] for i in items][1:3]
 
     for current_id in ids:
         relevant_items = fetch_relevant_items(cursor, current_id)
