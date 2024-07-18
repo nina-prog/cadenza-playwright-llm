@@ -23,7 +23,7 @@ def create_finetuning_data_sample(html_path: str, image_path: str, precondition_
     input = create_input_prompt(html_path, image_path, precondition_path, description, config=config)
 
     # Get id for the current test case
-    current_id = html_path.split("\\")[-1].split(".")[0]
+    current_id = validation_path.split("\\")[-1].split(".")[0] # Changed to validation path to better reflect the step
     current_test, current_step = current_id.split("_")
     # Add 0s as filler
     updated_test = "0" + current_test if int(current_test) < 10 else current_test
@@ -64,7 +64,7 @@ def save_finetuning_data_as_json(data: list, output_dir: str = './data/finetunin
     size = len(data)
     output_path = f'{output_dir}/s{size}_finetuning_data_{name}_{timestamp}.json'
 
-    with open(output_path, 'w') as f:
-        json.dump(data, f, indent=4)
+    with open(output_path, 'w', encoding="utf8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
     logger.info(f"Finetuning data saved as JSON file: {output_path}")
