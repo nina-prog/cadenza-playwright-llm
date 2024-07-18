@@ -19,9 +19,16 @@ def fetch_relevant_items(cursor, current_id: str) -> list:
     if not previous_id:
         return []
 
-    query = 'SELECT * FROM tests WHERE id IN (?, ?)'
-    cursor.execute(query, (current_id, previous_id))
-    return cursor.fetchall()
+    query_prev = f"SELECT * FROM tests WHERE id = {previous_id}"
+    query_curr = f"SELECT * FROM tests WHERE id = {current_id}"
+    cursor.execute(query_prev)
+    prev = cursor.fetchall()
+    cursor.execute(query_curr)
+    curr = cursor.fetchall()
+
+    comp = prev + curr
+
+    return comp
 
 
 def map_items_to_args(items: list, config: dict, prefix: str = ".\\data\\raw\\") -> dict:
@@ -62,6 +69,8 @@ def create_finetuning_data_from_db(ids: list, db_file: str, config: dict) -> lis
             continue
 
         args = map_items_to_args(items, config)
+        args['image_path'] = args['image_path'].replace('\\', '/')
+
         data_sample = create_finetuning_data_sample(**args)
         finetuning_data.append(data_sample)
 

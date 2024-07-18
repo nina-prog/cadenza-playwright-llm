@@ -6,12 +6,30 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__, level='INFO')
 
 
-def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = '../data/raw/test_script'):
+def get_tc_ids(dir):
+    '''
+    :param dir: gets path to directory of all test_scripts
+    :return: list of all test cases as int
+    '''
+    tc_ids = []
+    ts_list = os.listdir(dir)
+    if '.gitkeep' in ts_list:
+        ts_list.remove('.gitkeep')
+    for el in ts_list:
+        id = el.split('_')[0]
+        if id not in tc_ids:
+            tc_ids.append(id)
+    tc_ids = [int(tc) for tc in tc_ids]
+
+    return tc_ids
+
+def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = './data/raw/test_script'):
     """ Split the original data in test, train and validation
     :param perc_test: Percentage of the test data of all data
     :param perc_val: Percentage of the validation data of the training subset
     :param seed: Random seed
     :param dir: Directory to the script files
+    :return: lists of Ids for the 3 categories and information regarding the test steps (all as int)
     """
     if not os.path.isdir(dir):
         logger.info("Directory is missing. Presumably given wrong path")
@@ -20,8 +38,10 @@ def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = '../data/raw/test_s
         len([name for name in os.listdir(dir) if os.path.isfile(os.path.join(dir, name)) and name != '.gitkeep']))
     # Lists for all test cases and all test steps
     ts_list = os.listdir(dir)
-    ts_list.remove('.gitkeep')
-    tc_list = [i for i in range(1, 31)]
+    logger.debug(ts_list)
+    if '.gitkeep' in ts_list:
+        ts_list.remove('.gitkeep')
+    tc_list = get_tc_ids(dir)
 
     np.random.seed(seed)
     idx = np.random.permutation(tc_list)
@@ -41,6 +61,7 @@ def triple_split(perc_test=0.2, perc_val=0.2, seed=17, dir = '../data/raw/test_s
     return ids_train, ids_val, ids_test, ts_list, test_steps
 
 
+
 def balance_tests(ids_train, ids_test, ids_val, perc_test, perc_val, ts_list, test_steps):
     """
     :param ids_train: List of testcases used for training
@@ -50,6 +71,7 @@ def balance_tests(ids_train, ids_test, ids_val, perc_test, perc_val, ts_list, te
     :param perc_val: Percentage of the validation data of the training subset
     :param ts_list: List of all test steps
     :param test_steps: Number of test steps
+    :return: The balanced id lists and a flag to show if something has been altered
     """
     trigger_flag = False
 
@@ -126,9 +148,12 @@ def balanced_train_val_test_split(perc_test=0.2, perc_val=0.2, balanced=True):
     :param perc_val: Percentage of the test data of all data
     :param perc_test: Percentage of the test data of all data
     :param balanced: Boolean to balance the test case split based on the amount of underlying test steps
+    :return: 3 Lists of test case Ids; Training, Validation and Test.
     """
+    logger.debug(os.getcwd())
 
-    ids_train, ids_val, ids_test, ts_list, steps = triple_split(perc_val, perc_test, seed=17, dir = '../data/raw/test_script')
+
+    ids_train, ids_val, ids_test, ts_list, steps = triple_split(perc_val, perc_test, seed=17, dir = './data/raw/test_script')
 
     trigger_flag = True
     dl_timer = time.process_time()  # Sollte eig. nicht vorkommen können, dient der Absicherung
