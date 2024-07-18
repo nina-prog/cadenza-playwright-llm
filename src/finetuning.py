@@ -53,15 +53,16 @@ def create_finetuning_data_sample(html_path: str, image_path: str, precondition_
     return conversation
 
 
-def save_finetuning_data_as_json(data: list, output_dir: str = './data/finetuning'):
+def save_finetuning_data_as_json(data: list, output_dir: str = './data/finetuning', name: str = 'default'):
     """Save the finetuning data to a JSON file.
 
     :param data: List of finetuning data samples.
+    :param name: The name of the output file to destinguish between test, validation and training.
     :param output_dir: Directory to save the JSON file.
     """
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     size = len(data)
-    output_path = f'{output_dir}/s{size}_finetuning_data_{timestamp}.json'
+    output_path = f'{output_dir}/s{size}_finetuning_data_{name}_{timestamp}.json'
 
     with open(output_path, 'w') as f:
         json.dump(data, f, indent=4)

@@ -102,6 +102,8 @@ def get_previous_id(id: str) -> str:
         test, step = map(int, id.split('.'))
         if step > 1:
             return f"{test}.{step - 1}"
+        elif step == 1:
+            return "0.1"
         else:
             logger.warning(f"Test {test} has no previous step. Cannot retrieve ID.")
             return ""
