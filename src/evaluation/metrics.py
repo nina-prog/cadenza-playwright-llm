@@ -1,4 +1,6 @@
 from typing import Union, List
+from typing import Dict, List, Union
+import time
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from Levenshtein import distance
 import esprima
@@ -14,27 +16,41 @@ from src.utils.logger import setup_logger
 logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
 
 
-def aggregate_scores(scores: dict) -> dict:
-    """ This method aggregates the given scores. It supports multiple scores: weighted bleu, success rate,
-    and levenshtein distance. Note that the keys of the given scores must be the same.
+def aggregate_scores(scores: Dict[str, List[Union[float, int, None]]]) -> Dict[str, Union[float, None]]:
+    """Aggregates the given scores. Supports multiple metrics: weighted bleu, success rate,
+    and levenshtein distance. The keys of the given scores must be the same.
 
     :param scores: The scores to aggregate.
     :return: The aggregated scores of the given scores.
     """
+    if not scores:
+        raise ValueError("The scores dictionary is empty.")
+
     metrics = scores.keys()
 
-    if len(set([len(scores[metric]) for metric in metrics])) != 1:
+    # Check if all score lists have the same length
+    score_lengths = {metric: len(scores[metric]) for metric in metrics}
+    if len(set(score_lengths.values())) != 1:
         raise ValueError("The given scores must have the same length.")
 
     agg_scores = {}
+
     for metric in metrics:
         try:
-            if metric == 'weighted bleu' or metric == 'success rate' or metric == 'levenshtein distance':
-                if all(scores[metric]):
-                    agg_scores[metric] = sum(scores[metric]) / len(scores[metric])
-                else:
+            if metric in {'weighted bleu', 'success rate', 'levenshtein distance'}:
+                metric_scores = scores[metric]
+
+                if not metric_scores:
                     agg_scores[metric] = None
                     logger.warning(f"Missing {metric} scores. Skipping...")
+                    continue
+
+                if any(score is None for score in metric_scores):
+                    logger.warning(f"Found None values in {metric} scores. Setting to 0...")
+                    metric_scores = [0 if score is None else score for score in metric_scores]
+
+                # Calculate the average score
+                agg_scores[metric] = sum(metric_scores) / len(metric_scores)
             else:
                 agg_scores[metric] = None
                 logger.warning(f"Unknown metric: {metric}. Skipping...")
@@ -44,12 +60,12 @@ def aggregate_scores(scores: dict) -> dict:
 
     return agg_scores
 
-
-def calculate_scores(test_cases: List[dict], test_name, metrics=None) -> dict:
+def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None) -> dict:
     """Calculate scores for given metrics across multiple test cases.
 
     :param test_cases: List of dictionaries, each containing 'generated_code', 'validation_code',
                        'precondition_code', etc.
+    :param config: The configuration dictionary.
     :param metrics: List of metrics to calculate the scores for, e.g., ['weighted bleu', 'success rate', 'levenshtein distance']
     :return: Dictionary containing scores for each metric across all test cases.
     """
@@ -59,34 +75,48 @@ def calculate_scores(test_cases: List[dict], test_name, metrics=None) -> dict:
     scores = {metric: [] for metric in metrics}
 
     for test_case in test_cases:
+        test = test_case.get('test_case', '')
+        test_step = test_case.get('test_step', '')
         generated_code = test_case.get('generated_code', '')
         validation_code = test_case.get('validation_code', '')
         precondition_code = test_case.get('precondition_code', '')
+
+        logger.debug(f"Calculating scores for test case {test}_{test_step}...")
 
         for metric in metrics:
             try:
                 match metric:
                     case 'weighted bleu':
-                        scores[metric].append(calculate_weighted_bleu_score(generated_code, validation_code, precondition_code))
+                        scores[metric].append(
+                            calculate_weighted_bleu_score(generated_code, validation_code, precondition_code)
+                        )
                     case 'success rate':
-                        file_name = test_name + ".spec"
-                        screen_shot_dir = "./run_test_prediction/"
-                        scores[metric].append(calculate_success_rate(generated_code, file_name=file_name, screen_shot_dir=screen_shot_dir))
+                        file_name = test + "_" + test_step + ".spec.ts"
+                        scores[metric].append(
+                            calculate_success_rate(generated_code, file_name=file_name, config=config)
+                        )
                     case 'similarity':
-                        file_name = test_name + ".spec"
-                        screen_shot_dir_pred = "./run_test_prediction/"
-                        screen_shot_dir_gt = "./run_test_get/"
-                        pred_name = screen_shot_dir_pred + file_name + ".spec.ts"
-                        gt_name = screen_shot_dir_gt + file_name + ".spec.ts"
-                        scores[metric].append(encode_and_calculate_similarity(pred_name, gt_name, screen_shot_dir=screen_shot_dir))
+                        #if not os.path.exists(config['paths']['eval_run_dir'] + "screenshots/"):
+                        #    logger.error(f"Screenshots for similarity metric not found. Skipping...")
+                        #file_name = test + "_" + test_step + ".png"
+                        #gt_image_path = config['dataloading']['screenshot_dir'] + file_name
+                        #generated_image_path = config['paths']['eval_run_dir'] + "screenshots/" + file_name
+                        # config['dataloading']['screenshot_dir'], config['paths']['eval_run_dir'] + "screenshots/"
+                        #scores[metric].append(
+                        #    encode_and_calculate_similarity("./data/raw/screenshot/0_1.png", "./data/raw/screenshot/1_1.png")
+                        #)
+                        pass
                     case 'levenshtein distance':
-                        scores[metric].append(calculate_levenshtein_distance(generated_code, validation_code))
+                        scores[metric].append(
+                            calculate_levenshtein_distance(generated_code, validation_code)
+                        )
                     case _:
                         scores[metric].append(None)
                         logger.warning(f"Unknown metric: {metric}. Skipping...")
             except Exception as e:
                 scores[metric].append(None)
-                logger.error(f"Error calculating {metric} for test case: {e}")
+                logger.error(f"Error calculating {metric} for test case {test}_{test_step}: {e}")
+
 
     return scores
 
@@ -161,62 +191,102 @@ def calculate_weighted_bleu_score(generated_code: str, validation_code: str, pre
     return (1 - alpha) * first_bleu_score + alpha * second_bleu_score
 
 
+def calculate_success_rate(generated_code: str, file_name: str, config: dict):
+    """Returns the success rate of the given generated code."""
+    try:
+        # Normalize paths
+        eval_run_dir = os.path.normpath(config['paths']['eval_run_dir'])
+        screen_shot_dir = os.path.join(eval_run_dir, 'screenshots')
 
-def calculate_success_rate(generated_code: str, file_name, screen_shot_dir):
-    # try to run genrated playwrigth code and if successfull then true 1 as success rate
-    # Create directories for screenshots
-    os.makedirs(screen_shot_dir, exist_ok=True)
-    if not os.path.exists(screen_shot_dir):
-        print(f"Failed to create the file {screen_shot_dir}.")
-        return
-    
-    screenshot_path = os.path.join(screen_shot_dir, file_name + ".png")
-    ## Code to add in script: Specify code to take screenshot 
-    screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
-    time_out = 30000
-    time_out_code = f"  test.setTimeout({time_out});\n"
+        # Logging paths and current working directory
+        logger.debug(f"Current working directory: {os.getcwd()}")
+        logger.debug(f"Screenshot directory: {screen_shot_dir}")
+        logger.debug(f"Evaluation run directory: {eval_run_dir}")
 
-    # Find the position to insert the screenshot command
-    assert type(generated_code) == type([])
-    insert_position = 0
-    for i, line in enumerate(generated_code):
-        if 'async' in line and 'test(' in line:
-            insert_position = i + 1
-            break
-    
-    # Insert the timeout code and screenshot command
-    generated_code.insert(insert_position, time_out_code)
-    found_position = 0
-    last_await_position = 0
-    for i, line in enumerate(generated_code):
-        if "await page.close()" in line or "await context.close()" in line or "await browser.close()" in line:
-            found_position = 1
-            insert_position = i 
-            break
-        if "await" in line:
-            last_await_position = i + 1  # position after the last "await" line
+        # Create directories for screenshots
+        os.makedirs(screen_shot_dir, exist_ok=True)
+        file_name_png = file_name.split(".")[0]  # remove .spec.ts
+        screenshot_path = os.path.join(screen_shot_dir, f"{file_name_png}.png")
+        # Replace backslashes with forward slashes
+        #screenshot_path = screenshot_path.replace("\\", "/")
+        logger.debug(f"Screenshot path: {screenshot_path}")
 
-    if found_position == 0:
-        insert_position = last_await_position
+        screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
+        time_out = 30000
+        time_out_code = f"  test.setTimeout({time_out});\n"
 
-    # Insert the screenshot and HTML extraction commands
-    generated_code.insert(insert_position, screenshot_code)
+        generated_code = generated_code.split("\n")
 
-    temp_path = "./test_script/temp.spec.ts"
-    with open(temp_path, 'w') as file:
-        file.writelines(generated_code)
+        #### insert screenshot code
+        # Find the position to insert the screenshot command
+        assert type(generated_code) == type([])
+        insert_position = 0
+        for i, line in enumerate(generated_code):
+            if 'async' in line and 'test(' in line:
+                insert_position = i + 1
+                break
 
-    if os.path.exists(temp_path):
-        print(f"File {temp_path} created successfully.")
-    else:
-        print(f"Failed to create the file {temp_path}.")
-        return
-    
-    # Run the Playwright test
-    result = os.system(f"npx playwright test {temp_path}")
-    if result == 0:
-        return 1
-    else:
+        # Insert the timeout code and screenshot command
+        generated_code.insert(insert_position, time_out_code)
+        found_position = 0
+        last_await_position = 0
+        for i, line in enumerate(generated_code):
+            if "await page.close()" in line or "await context.close()" in line or "await browser.close()" in line:
+                found_position = 1
+                insert_position = i
+                break
+            if "await" in line:
+                last_await_position = i + 1  # position after the last "await" line
+
+        if found_position == 0:
+            insert_position = last_await_position
+
+        # Insert the screenshot and HTML extraction commands
+        generated_code.insert(insert_position, screenshot_code)
+        ####
+
+        # Ensure the directory for the temp_path exists
+        temp_dir = os.path.join(eval_run_dir, "test_script")
+        os.makedirs(temp_dir, exist_ok=True)
+        logger.debug(f"Created temp directory: {temp_dir}")
+
+        temp_path = os.path.join(temp_dir, file_name)
+        logger.debug(f"Temp file path: {temp_path}")
+
+        # Save updated test code to a temporary file
+        try:
+            with open(temp_path, 'w', encoding="utf-8") as file:
+                file.write("\n".join(generated_code))
+            logger.debug(f"File {temp_path} created successfully.")
+        except Exception as e:
+            logger.error(f"Failed to create the file {temp_path}. Error: {e}")
+            return 0
+
+        # Small delay to account for file system delays
+        time.sleep(1)
+
+        # Run the Playwright test
+        try:
+            logger.debug(f"Current working directory: {os.getcwd()}")
+            result = os.system(f"npx playwright test {temp_path} --config=config/playwright.config.ts")
+            score = 1 if result == 1 else 0
+        except Exception as e:
+            logger.error(f"Failed to run Playwright test. Error: {e}")
+            return 0
+
+        # Delete temp file after test run if defined in config
+        if config.get('evaluation', {}).get('delete_temp_files', False):
+            try:
+                os.remove(temp_path)
+                logger.debug(f"Deleted temp file {temp_path}.")
+            except Exception as e:
+                logger.error(f"Failed to delete temp file {temp_path}. Error: {e}")
+
+        logger.debug(f"Playwright test result: {result}")
+        return score
+
+    except Exception as e:
+        logger.error(f"An error occurred: {e}")
         return 0
     
 
