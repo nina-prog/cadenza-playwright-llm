@@ -33,7 +33,7 @@ import argparse
 
 class LLaVAModel:
 
-    def __init__(self, model_path, model_base, sep, temperature, top_p, num_beams, max_new_tokens):
+    def __init__(self, model_path, model_base, sep, temperature, top_p, num_beams, max_new_tokens, include_screenshot):
         disable_torch_init()
 
         self.model_name = get_model_name_from_path(model_path)
@@ -46,6 +46,7 @@ class LLaVAModel:
         self.top_p = top_p
         self.num_beams = num_beams
         self.max_new_tokens = max_new_tokens
+        self.include_screenshot = include_screenshot
 
     def run_inference(self, input_model):
         qs = input_model['prompt']
@@ -79,14 +80,18 @@ class LLaVAModel:
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
 
-        image_files = self.image_parser(image_file, self.sep)
-        images = self.load_images(image_files)
-        image_sizes = [x.size for x in images]
-        images_tensor = process_images(
-            images,
-            self.image_processor,
-            self.model.config
-        ).to(self.model.device, dtype=torch.float16)
+        if include_screenshot:
+            image_files = self.image_parser(image_file, self.sep)
+            images = self.load_images(image_files)
+            image_sizes = [x.size for x in images]
+            images_tensor = process_images(
+                images,
+                self.image_processor,
+                self.model.config
+            ).to(self.model.device, dtype=torch.float16)
+        else:
+            image_sizes = []
+            images_tensor = None
 
         input_ids = (
             tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
@@ -153,13 +158,16 @@ if __name__ == "__main__":
 
     print("There are {} data.".format(len(items)))
 
+    include_screenshot = config['input_settings'].get('include_screenshot', True)
+
     args_init = {'model_path': args.model_path,
                  'model_base': None,
                  "sep": ",",
                  "temperature": 0,
                  "top_p": None,
                  "num_beams": 1,
-                 "max_new_tokens": 512
+                 "max_new_tokens": 512,
+                 "include_screenshot": include_screenshot
                  }
 
     model = LLaVAModel(**args_init)
