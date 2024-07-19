@@ -16,7 +16,7 @@ dataloading:
 # PREPROCESSING SETTINGS
 preprocessing:
   html:
-    concat_mod: "all" # or single
+    concat_mod: "single" # or all
     max_attr_length: 50
   image:
     max_length: 100
@@ -24,7 +24,7 @@ preprocessing:
 # INPUT SETTINGS
 input_settings:
   model_type: "multimodal" # or 'text_based'
-  template_name: "template_2"
+  template_name: "template_1"
   include_html: True
   include_screenshot: True
   # precondition always set to True as a baseline

@@ -3,7 +3,7 @@ import json
 from datetime import datetime
 
 from src.input_builder import create_input_prompt
-from src.data.code_processor import parse_code
+from src.data.code_processor import parse_code, parse_code_with_demark
 
 from src.utils.logger import setup_logger
 
@@ -42,7 +42,7 @@ def create_finetuning_data_sample(html_path: str, image_path: str, precondition_
             },
             {
                 "from": "gpt",
-                "value": parse_code(validation_path)
+                "value": parse_code_with_demark(validation_path) # parse_code(validation_path)
             }
         ]
     }
