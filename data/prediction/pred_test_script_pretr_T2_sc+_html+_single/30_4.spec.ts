@@ -1,0 +1,24 @@
+test('Duplizieren', async ({ page }) => {
+  await page.click('#ad-hoc-settings-LO8EpTw_Rr6ParizyY3AtQ');
+  await page.click('#XiLJl6B9eNiukNp9-o_i7');
+  await page.click('#navigationTrigger');
+  await page.click('#U9Gw85AB92qqz_M27Q8K6');
+  await page.click('#home');
+  await page.click('#skip-to-navigator');
+  await page.click('#skip-to-content');
+  await page.click('#Messstellenkarte');
+  await page.click('#Speichern');
+  await page.click('#Speichern');
+  await page.click('#Speichern');
+  await page.click('#Speichern');
+  await page.click('#Zugriffseinstellungen');
+  await page.click('#Neue Sicht');
+  await page.click('#Mehr');
+  await page.click('#abbrechen');
+  await page.click('#aktualisieren');
+  await page.click('#diensteinstellungen');
+  await page.click('#exportieren');
+  await page.click('#kopie-ins-repository-speichern');
+  await page.click('#designer-oppen');
+  await page.click('#loeschen');
+});

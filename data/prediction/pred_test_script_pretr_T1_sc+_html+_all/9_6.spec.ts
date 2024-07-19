@@ -1,0 +1,32 @@
+import { test, expect } from '@playwright/test';
+import { writeFileSync } from 'fs';
+
+test('test', async ({ page }) => {
+  await page.goto('http://localhost:8080/cadenza/');
+  await page.click('#skip-to-navigator');
+  await page.click('#skip-to-content');
+  await page.click('home');
+  await page.click('Anmelden');
+  await page.fill('Benutzername *', 'Admin');
+  await page.fill('Benutzername *', 'Admin');
+  await page.press('Tab');
+  await page.click('Analysekontext (ALT+⇧+1)');
+  await page.click('Schließen (⇧+ESC)');
+  await page.click('Analysekontext (ALT+⇧+1)');
+  await page.click('Zum Navigatorbaum springen');
+  await page.click('Zum Hauptbereich springen');
+  await page.click('Startseite');
+  await page.click('Karte');
+  await page.click('disy Cadenza v9.4.71');
+  await page.click('© Disy Informationssysteme GmbH');
+  await page.click('Über Disy');
+  await page.click('Informationen zur Arbeitsmappe');
+  await page.click('Speichern unter ...');
+  await page.click('Speichern');
+  await page.click('Speichern und veröffentlichen');
+  await page.click('Zugriffseinstellungen');
+  await page.click('Neue Sicht');
+  await page.click('Mehr');
+  await page.click('Daten laden');
+  await page.click('Weitere Daten hinzufügen');
+});

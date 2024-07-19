@@ -1,0 +1,66 @@
+import { test, expect } from '@playwright/test';
+import { writeFileSync } from 'fs';
+
+// ... Precondition code ...
+
+// UI Test Description: Öffne den Ordner "Gewässergüte"
+const GewässergüteFolder = 'Verzeichnis Gewässergüte';
+
+// Add code to the precondition to open the folder "Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to fill the username "Admin" and click on the login button
+// ...
+
+// Add code to click on the link "Verzeichnis Gewässergüte"
+// ...
+
+// Add code to click
