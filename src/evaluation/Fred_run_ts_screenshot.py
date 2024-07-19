@@ -17,7 +17,7 @@ SCREENSHOT_DIR = './screenshots_run_tests/'
 # Create directories for screenshots and HTML results if they don't exist
 os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 # os.makedirs(HTML_DIR, exist_ok=True)
-
+print("run")
 # Iterate over all test scripts in the specified directory
 for root, _, files in os.walk(TEST_DIR):
     for file in files:
@@ -38,7 +38,7 @@ for root, _, files in os.walk(TEST_DIR):
 
             # Specify code to take screenshot and extract HTML
             screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
-            time_out = 30000
+            time_out = 20000
             time_out_code = f"  test.setTimeout({time_out});\n"
             # html_extraction_command = (
             #     '  const page_content = await page.content();\n'
