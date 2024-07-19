@@ -1,11 +1,13 @@
 # PATH SETTINGS FROM PROJECT ROOT
 paths:
-  prediction_dir: "./data/prediction/pred_test_script/"
   model_dir: "./models/"
   processed_data_dir: "./data/processed/"
   raw_data_dir: "./data/raw/"
   external_data_dir: "./data/external/"
   scores_dir: "./data/scores/"
+  prediction_dir: "./data/prediction/pred_test_script_template_1_html_concat_mode_single_max_attr_length_50_pretrained/"
+  temp_dir: "./data/temp/"
+  eval_run_dir: "./data/temp/eval_run/"
 
 # DATA LOADER SETTINGS
 dataloading:
@@ -55,6 +57,9 @@ templates:
       You must continue the given precondition test code.
     multimodal_addition: "\nAssistant: "
 
+# EVALUATION SETTINGS
+evaluation:
+  delete_temp_files: False
 
 # TBD - ARCHITECTURE SETTINGS
 architecture:
