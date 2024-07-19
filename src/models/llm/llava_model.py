@@ -1,4 +1,4 @@
-from llava.constants import (
+from LLaVA.llava.constants import (
     IMAGE_TOKEN_INDEX,
     DEFAULT_IMAGE_TOKEN,
     DEFAULT_IM_START_TOKEN,
@@ -6,11 +6,11 @@ from llava.constants import (
     IMAGE_PLACEHOLDER,
 )
 
-from llava.conversation import conv_templates
-from llava.model.builder import load_pretrained_model
-from llava.utils import disable_torch_init
+from LLaVA.llava.conversation import conv_templates
+from LLaVA.llava.model.builder import load_pretrained_model
+from LLaVA.llava.utils import disable_torch_init
 
-from llava.mm_utils import (
+from LLaVA.llava.mm_utils import (
     process_images,
     tokenizer_image_token,
     get_model_name_from_path,
@@ -27,6 +27,8 @@ import sqlite3
 from main import main_cluster
 from src.data.database import fetch_relevant_items, map_items_to_args
 from src.data.data_loading import load_config
+
+import argparse
 
 
 class LLaVAModel:
@@ -45,22 +47,10 @@ class LLaVAModel:
         self.num_beams = num_beams
         self.max_new_tokens = max_new_tokens
 
-    def run_inference(self, query, image_file):
-        qs = query
+    def run_inference(self, input_model):
+        qs = input_model['prompt']
+        image_file = input_model['image_path']
 
-        # TODO: Remove?
-        image_token_se = DEFAULT_IM_START_TOKEN + DEFAULT_IMAGE_TOKEN + DEFAULT_IM_END_TOKEN
-        if IMAGE_PLACEHOLDER in qs:
-            if self.model.config.mm_use_im_start_end:
-                qs = re.sub(IMAGE_PLACEHOLDER, image_token_se, qs)
-            else:
-                qs = re.sub(IMAGE_PLACEHOLDER, DEFAULT_IMAGE_TOKEN, qs)
-        else:
-            if self.model.config.mm_use_im_start_end:
-                qs = image_token_se + "\n" + qs
-            else:
-                qs = DEFAULT_IMAGE_TOKEN + "\n" + qs
-                
         if "llama-2" in self.model_name.lower():
             conv_mode = "llava_llama_2"
         elif "mistral" in self.model_name.lower():
@@ -148,10 +138,14 @@ class LLaVAModel:
 
 
 if __name__ == "__main__":
-    # Connect to the database
-    config = load_config("../config/config.yaml")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--model-path", type=str, required=True)
+    args = parser.parse_args()
 
-    conn = sqlite3.connect('../data/raw/playwright_script.db')
+    # Connect to the database
+    config = load_config("./config/config.yaml")
+
+    conn = sqlite3.connect('./data/raw/playwright_script.db')
     cursor = conn.cursor()
 
     res = cursor.execute("SELECT * FROM tests")
@@ -159,7 +153,7 @@ if __name__ == "__main__":
 
     print("There are {} data.".format(len(items)))
 
-    args_init = {'model_path': "/pfs/data5/home/kit/tm/ge6778/PSDA/llava-v1.5-7b-finetune_lora-test-2_merged",
+    args_init = {'model_path': args.model_path,
                  'model_base': None,
                  "sep": ",",
                  "temperature": 0,
@@ -170,14 +164,17 @@ if __name__ == "__main__":
 
     model = LLaVAModel(**args_init)
 
-    # TODO: Remove [1:3]
-    ids = [i[0] for i in items][1:3]
+    ids = [i[0] for i in items]
 
     for current_id in ids:
         relevant_items = fetch_relevant_items(cursor, current_id)
         print(current_id)
         print(relevant_items)
         args = map_items_to_args(relevant_items, config)
+        args['image_path'] = args['image_path'].replace('\\', '/')
+        args['html_path'] = args['html_path'].replace('\\', '/')
+        args['precondition_path'] = args['precondition_path'].replace('\\', '/')
+        args['validation_path'] = args['validation_path'].replace('\\', '/')
         print(args)
         args['model'] = model
         main_cluster(**args)

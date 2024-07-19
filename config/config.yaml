@@ -47,6 +47,13 @@ templates:
       Follow the steps in the ui test description to perform actions on the website. Generate Playwright test code for the given webpage and the actions.
       Don't explain the code, just generate the code block itself. You must continue the given precondition test code.
     multimodal_addition: "\nAssistant: "
+  template_5:
+    base_context_prompt: |
+      ### Task:
+      I will describe a UI test in German and you will generate Playwright code. The description of the UI test is in UI Test Description. 
+      Use the Simplified HTML Content to get the correct links from the HTML of the website. Don't explain the code, just generate the code block itself.  
+      You must continue the given precondition test code.
+    multimodal_addition: "\nAssistant: "
 
 
 # TBD - ARCHITECTURE SETTINGS
