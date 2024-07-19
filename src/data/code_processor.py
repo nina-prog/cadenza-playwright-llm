@@ -23,6 +23,6 @@ def parse_code_with_demark(precondition_path: str) -> str:
         code = file.read()
     logger.debug(f"Code parsed successfully. - Lines of Code: {len(code.splitlines())}")
 
-    code_with_demark = "'''javascript \n" + code + " \n'''"
+    code_with_demark = "```javascript\n" + code + "\n```"
 
     return code_with_demark
