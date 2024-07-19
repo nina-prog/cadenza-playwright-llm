@@ -8,8 +8,9 @@ import os
 import torch
 import torchvision.transforms as transforms
 from PIL import Image
-from torchvision import models
+from torchvision import models, transforms
 from torch.nn.functional import cosine_similarity
+
 
 from src.utils.logger import setup_logger
 
@@ -70,10 +71,9 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
     :return: Dictionary containing scores for each metric across all test cases.
     """
     if metrics is None:
-        metrics = ['weighted bleu', 'success rate', 'levenshtein distance']
-
+        metrics = ['weighted bleu', 'success rate', 'levenshtein distance', "similarity"]
     scores = {metric: [] for metric in metrics}
-
+    
     for test_case in test_cases:
         test = test_case.get('test_case', '')
         test_step = test_case.get('test_step', '')
@@ -81,6 +81,8 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
         validation_code = test_case.get('validation_code', '')
         precondition_code = test_case.get('precondition_code', '')
 
+        image_folder_pred  = os.path.normpath(config['paths']['eval_run_dir'])
+        image_folder_gt = os.path.normpath(config['paths']['gt_images'])
         logger.debug(f"Calculating scores for test case {test}_{test_step}...")
 
         for metric in metrics:
@@ -96,16 +98,29 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
                             calculate_success_rate(generated_code, file_name=file_name, config=config)
                         )
                     case 'similarity':
-                        #if not os.path.exists(config['paths']['eval_run_dir'] + "screenshots/"):
-                        #    logger.error(f"Screenshots for similarity metric not found. Skipping...")
-                        #file_name = test + "_" + test_step + ".png"
-                        #gt_image_path = config['dataloading']['screenshot_dir'] + file_name
-                        #generated_image_path = config['paths']['eval_run_dir'] + "screenshots/" + file_name
-                        # config['dataloading']['screenshot_dir'], config['paths']['eval_run_dir'] + "screenshots/"
-                        #scores[metric].append(
-                        #    encode_and_calculate_similarity("./data/raw/screenshot/0_1.png", "./data/raw/screenshot/1_1.png")
-                        #)
-                        pass
+
+                        #file_name_png = file_name.split(".")[0]  # remove .spec.ts
+                        screenshot_path_pred = os.path.join(image_folder_pred, f"{file_name.split(".")[0]}.png")
+                        screenshot_path_gt = os.path.join(image_folder_gt, f"{file_name}.png")
+                    
+                        model = getattr(models, "resnet18")(pretrained=True)
+                        model.eval()
+                        if not os.path.exists(screenshot_path_gt):
+                            scores[metric].append(
+                            0
+                            )
+                        else:
+
+                            # Define your preprocessing steps here
+                            preprocess = transforms.Compose([
+                                transforms.Resize((224, 224)),  # Resize the images to the size expected by the model
+                                transforms.ToTensor(),  # Convert the image to a PyTorch tensor
+                                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),  # Normalize the tensor
+    ])
+                            scores[metric].append(
+                                encode_and_calculate_similarity(screenshot_path_pred, screenshot_path_gt,model=model, preprocess=preprocess)
+                            )
+
                     case 'levenshtein distance':
                         scores[metric].append(
                             calculate_levenshtein_distance(generated_code, validation_code)
@@ -120,22 +135,14 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
 
     return scores
 
-def encode_and_calculate_similarity(image_path1, image_path2, model_name='resnet18'):
-    # Load a pre-trained model
-    model = getattr(models, model_name)(pretrained=True)
-    model.eval()
-
-    # Define a transformation to apply to the images
-    preprocess = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+def encode_and_calculate_similarity(pred_img_path, gt_img_path, model, preprocess):
+    # Check if the prediction image path exists
+    if not os.path.exists(pred_img_path):
+        return 0
 
     # Load and preprocess the images
-    image1 = Image.open(image_path1)
-    image2 = Image.open(image_path2)
+    image1 = Image.open(pred_img_path)
+    image2 = Image.open(gt_img_path)
     input_tensor1 = preprocess(image1).unsqueeze(0)  # Create a mini-batch as expected by the model
     input_tensor2 = preprocess(image2).unsqueeze(0)
 
@@ -145,8 +152,8 @@ def encode_and_calculate_similarity(image_path1, image_path2, model_name='resnet
         embedding2 = model(input_tensor2)
 
     # Calculate cosine similarity
-    cos_sim = cosine_similarity(embedding1, embedding2)
-    return cos_sim.item()
+    cos_sim = cosine_similarity(embedding1.numpy(), embedding2.numpy())
+    return round(cos_sim.item(), 4)
 
 
 def calculate_weighted_bleu_score(generated_code: str, validation_code: str, precondition_code: str,
@@ -197,7 +204,7 @@ def calculate_success_rate(generated_code: str, file_name: str, config: dict):
         # Normalize paths
         eval_run_dir = os.path.normpath(config['paths']['eval_run_dir'])
         screen_shot_dir = os.path.join(eval_run_dir, 'screenshots')
-
+        print(screen_shot_dir)
         # Logging paths and current working directory
         logger.debug(f"Current working directory: {os.getcwd()}")
         logger.debug(f"Screenshot directory: {screen_shot_dir}")

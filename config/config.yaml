@@ -8,6 +8,7 @@ paths:
   prediction_dir: "./data/prediction/pred_test_script/"
   temp_dir: "./data/temp/"
   eval_run_dir: "./data/temp/eval_run/"
+  gt_images: "./data/images/screenshots_ground_truth/"
 
 # DATA LOADER SETTINGS
 dataloading:
