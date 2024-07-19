@@ -208,7 +208,7 @@ def calculate_success_rate(generated_code: str, file_name: str, config: dict):
         file_name_png = file_name.split(".")[0]  # remove .spec.ts
         screenshot_path = os.path.join(screen_shot_dir, f"{file_name_png}.png")
         # Replace backslashes with forward slashes
-        #screenshot_path = screenshot_path.replace("\\", "/")
+        screenshot_path = screenshot_path.replace("\\", "/")
         logger.debug(f"Screenshot path: {screenshot_path}")
 
         screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
