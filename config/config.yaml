@@ -65,6 +65,7 @@ templates:
 # EVALUATION SETTINGS
 evaluation:
   delete_temp_files: False
+  activate: False
 
 # TBD - ARCHITECTURE SETTINGS
 architecture:
