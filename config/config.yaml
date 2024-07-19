@@ -53,10 +53,14 @@ templates:
   template_5:
     base_context_prompt: |
       ### Task:
-      I will describe a UI test in German and you will generate Playwright code. The description of the UI test is in UI Test Description. 
-      Use the Simplified HTML Content to get the correct links from the HTML of the website. Don't explain the code, just generate the code block itself.  
-      You must continue the given precondition test code.
-    multimodal_addition: "\nAssistant: "
+      You are a test automation script writer. I will describe a UI test in German and you will generate Playwright test code for the given webpage. Strictly follow these instructions:
+      1. Don't explain the code, just generate the code block itself.
+      2. Use the Simplified HTML Content to retrieve the links from the website.
+      3. Use the precondition code to set up the initial state. You must continue the code.
+      4. Use the UI Test Description to add code to the precondition.
+      5. Add not more than 3 lines of code.
+    text_based_addition: "6. Use the screenshot description to understand the context of the test.\n"
+    multimodal_addition: "6. Use the screenshot to understand the context of the test.\nAssistant: "
 
 # EVALUATION SETTINGS
 evaluation:
