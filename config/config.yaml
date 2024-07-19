@@ -5,7 +5,7 @@ paths:
   raw_data_dir: "./data/raw/"
   external_data_dir: "./data/external/"
   scores_dir: "./data/scores/"
-  prediction_dir: "./data/prediction/pred_test_script_template_1_html_concat_mode_single_max_attr_length_50_pretrained/"
+  prediction_dir: "./data/prediction/pred_test_script/"
   temp_dir: "./data/temp/"
   eval_run_dir: "./data/temp/eval_run/"
 
@@ -18,7 +18,7 @@ dataloading:
 # PREPROCESSING SETTINGS
 preprocessing:
   html:
-    concat_mod: "single" # or all
+    concat_mod: "all" # or single
     max_attr_length: 50
   image:
     max_length: 100
@@ -26,7 +26,7 @@ preprocessing:
 # INPUT SETTINGS
 input_settings:
   model_type: "multimodal" # or 'text_based'
-  template_name: "template_1"
+  template_name: "template_2"
   include_html: True
   include_screenshot: True
   # precondition always set to True as a baseline
