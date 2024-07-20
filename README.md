@@ -17,8 +17,6 @@ This repository provides tools for automated UI test generation for the Disy Cad
 ├── 📄 README.md                              ← Documentation Overview of the project.
 ├── 📂 config/                                ← Configuration files for the project.
 │   ├── 📄 config.yaml                        ← Configuration file with all necessary parameters.
-│   ├── 📄 config_pred_01.yaml                ← Configuration file with predicitions.
-│   ├── 📄 config_pred_02.yaml                ← Configuration file with predictions.
 │   ├── 📄 config_with_german_template.yaml   ← Configuration with german settings
 │   └── 📄 playwright config.ts               ← Playwright configuration
 ├── 📂 data/                                  ← Data used for the project.
