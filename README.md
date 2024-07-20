@@ -71,7 +71,39 @@ Short overview of the project.
 ```
 
 # Setup
-Detailed setup instructions.
+Operating System: Windows 11 (64-bit), macOS
+
+Python Version: 3.10
+
+Clone the repository by running the following command in your terminal:
+```
+git clone https://github.com/nina-prog/cadenza-playwright-llm
+```
+Navigate to the project root directory by running the following command in your terminal:
+
+```
+cd cadenza-playwright-llm
+```
+
+
+[Optional] Create a virtual environment and activate it. For example, using the built-in venv module in Python:
+
+```
+python3 -m venv venv-psda
+source venv-psda/bin/activate
+```
+
+Install the required packages by running the following command in your terminal:
+```
+pip install -r requirements.in
+```
+
+
+[Optional] Run Jupyter notebooks (makes sure to have jupyter installed!):
+```
+python -m ipykernel install --user --name=psda python=3.10 # create kernel for jupyter notebook
+jupyter notebook # or open them via IDE (e.g. VSCode or PyCharm)
+```
 
 # Usage
 Guide on how to use the tools.
