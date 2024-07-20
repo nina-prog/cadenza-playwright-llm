@@ -70,7 +70,6 @@ This repository provides tools for automated UI test generation for the Disy Cad
 ├── 📄 .pre-commit-config.yaml                ← Configuration file for pre-commit hooks.
 ├── 📄 main.py                                ← 
 ├── 📄 requirements.in                        ← Requirements file for the project.
-├── 📄 train_test_split.ipynb                 ← 
 ├── 📂 .github/                               ← GitHub Actions configuration files.
 │   └── 📂 workflows/                         ← Directory for GitHub Actions workflows.
 │       └── 📄 ci.yml                         ← Continuous Integration workflow.
