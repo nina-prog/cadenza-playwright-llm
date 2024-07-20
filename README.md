@@ -71,9 +71,9 @@ Short overview of the project.
 ```
 
 # Setup
-# Operating System: Windows 11 (64-bit), macOS
+**Operating System:** Windows 11 (64-bit), macOS
 
-# Python Version: 3.10
+**Python Version:** 3.10
 
 Clone the repository by running the following command in your terminal:
 ```
