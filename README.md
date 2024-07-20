@@ -1,8 +1,14 @@
 # cadenza-playwright-llm
 This repository provides tools for automated UI test generation for the Disy Cadenza web app using Playwright and local language models (LLM). It demonstrates leveraging LLMs to create robust and maintainable UI test suites, enhancing the efficiency and quality of the testing process. This is part of the "Praktikum: Smart Data Analytics" SS24 at KIT (Karlsruher Institute of Technology).
 
-# Overview
-Short overview of the project.
+## Group Members 👤 
+| Forename  | Surname | Matr.#  |
+|-----------|---------|---------|
+| Nina      | Mertins | - |
+| Johannes  | Bordt   | - |
+| Christoph | Behrens | - |
+| Niklas    | Quendt  | - |
+| Frederik  | Broy     | - |
 
 # Project Structure
 ```
@@ -105,8 +111,6 @@ python -m ipykernel install --user --name=psda python=3.10 # create kernel for j
 jupyter notebook # or open them via IDE (e.g. VSCode or PyCharm)
 ```
 
-# Usage
-Guide on how to use the tools.
 
 # References
-List of references used in the project.
+- - - 
