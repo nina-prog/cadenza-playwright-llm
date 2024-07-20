@@ -1,0 +1,45 @@
+import { test, expect } from '@playwright/test';
+import { writeFileSync } from 'fs';
+
+test('Säulendiagramm', async ({ page }) => {
+  await page.goto('http://localhost:8080/cadenza/');
+  await page.click('#workbook-create-new-view-button');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container');
+  await page.click('#chart-container

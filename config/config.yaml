@@ -1,11 +1,14 @@
 # PATH SETTINGS FROM PROJECT ROOT
 paths:
-  prediction_dir: "./data/prediction/pred_test_script/"
   model_dir: "./models/"
   processed_data_dir: "./data/processed/"
   raw_data_dir: "./data/raw/"
   external_data_dir: "./data/external/"
   scores_dir: "./data/scores/"
+  prediction_dir: "./data/prediction/pred_test_script/"
+  temp_dir: "./data/temp/"
+  eval_run_dir: "./data/temp/eval_run/"
+  gt_images: "./data/images/screenshots_ground_truth/"
 
 # DATA LOADER SETTINGS
 dataloading:
@@ -16,7 +19,7 @@ dataloading:
 # PREPROCESSING SETTINGS
 preprocessing:
   html:
-    concat_mod: "single" # or all
+    concat_mod: "all" # or single
     max_attr_length: 50
   image:
     max_length: 100
@@ -24,7 +27,7 @@ preprocessing:
 # INPUT SETTINGS
 input_settings:
   model_type: "multimodal" # or 'text_based'
-  template_name: "template_5"
+  template_name: "template_2"
   include_html: True
   include_screenshot: True
   # precondition always set to True as a baseline
@@ -47,30 +50,22 @@ templates:
       Follow the steps in the ui test description to perform actions on the website. Generate Playwright test code for the given webpage and the actions.
       Don't explain the code, just generate the code block itself. You must continue the given precondition test code.
     multimodal_addition: "\nAssistant: "
-  template_3:
-    base_context_prompt:  |
-      ### Task:
-      Du bist ein Testautomatisierungsskript-Schreiber. Ich werde einen UI-Test auf Deutsch beschreiben und du wirst Playwright-Testcode für die gegebene Webseite erstellen. Befolge strikt diese Anweisungen:
-      1. Erkläre nicht den Code, generiere nur den Codeblock selbst.
-      2. Du bekommst einige HTML-Elemente und deren Attribute von der Webseite. Du kannst Playwright-Locators verwenden, um die Elemente anhand ihrer Attribute zu finden.
-      3. Verwende den Code der Vorbedingung, um den Anfangszustand einzurichten. Du musst den Code fortsetzen.
-      4. Befolge die Schritte in der UI-Testbeschreibung, um Aktionen auf der Webseite auszuführen.
-    text_based_addition: "5. Verwende die Screenshot-Beschreibung, um den Kontext des Tests zu verstehen.\n"
-    multimodal_addition: "5. Verwende den Screenshot, um den Kontext des Tests zu verstehen.\nAssistent: "
-  template_4:
-    base_context_prompt:  |
-      ### Task:
-      Befolge die Schritte in der UI-Testbeschreibung, um Aktionen auf der Webseite auszuführen. Generiere Playwright-Testcode für die gegebene Webseite und die Aktionen.
-      Erkläre den Code nicht, generiere nur den Codeblock selbst. Du musst den gegebenen Präcondition-Testcode fortsetzen.
-    multimodal_addition: "\nAssistent: "
   template_5:
     base_context_prompt: |
       ### Task:
-      I will describe a UI test in German and you will generate Playwright code. The description of the UI test is in UI Test Description. 
-      Use the Simplified HTML Content to get the correct links from the HTML of the website. Don't explain the code, just generate the code block itself.  
-      You must continue the given precondition test code.
-    multimodal_addition: "\nAssistant: "
+      You are a test automation script writer. I will describe a UI test in German and you will generate Playwright test code for the given webpage. Strictly follow these instructions:
+      1. Don't explain the code, just generate the code block itself.
+      2. Use the Simplified HTML Content to retrieve the links from the website.
+      3. Use the precondition code to set up the initial state. You must continue the code.
+      4. Use the UI Test Description to add code to the precondition.
+      5. Add not more than 3 lines of code.
+    text_based_addition: "6. Use the screenshot description to understand the context of the test.\n"
+    multimodal_addition: "6. Use the screenshot to understand the context of the test.\nAssistant: "
 
+# EVALUATION SETTINGS
+evaluation:
+  delete_temp_files: False
+  activate: False
 
 # TBD - ARCHITECTURE SETTINGS
 architecture:

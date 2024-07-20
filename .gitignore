@@ -178,9 +178,6 @@ yarn-error.log*
 .npm
 .npmrc
 
-# JSON files
-*.json
-
 # PNG images
 *.png
 

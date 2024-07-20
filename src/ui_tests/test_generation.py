@@ -63,8 +63,7 @@ def generate_code(combined_input: str, file_name: str, model_name="gpt2") -> str
 
     return generated_text
 
-
-async def generate_code_on_cluster(input_model, file_name: str, model: Access2Cluster) -> [str, str]:
+def generate_code_on_cluster(input_model, file_name: str, model) -> [str, str]:
     """ Generate the test case using the specified LLM model and saving the generated test case.
 
     :param input_model: The input for the LLM.
@@ -72,7 +71,7 @@ async def generate_code_on_cluster(input_model, file_name: str, model: Access2Cl
     :param model: The llm model to use.
     :return: The generated code and the programming language of the code.
     """
-    generated_text = await model.run_inference(input_model)
+    generated_text = model.run_inference(input_model)
 
     # Extract the code block from the generated text
     generated_text = strip_code_fence(generated_text, 'javascript')

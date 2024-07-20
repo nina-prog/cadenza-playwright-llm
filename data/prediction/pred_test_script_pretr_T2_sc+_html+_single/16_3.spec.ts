@@ -1,0 +1,21 @@
+test('Karte', async ({ page }) => {
+  await page.click('#navigationTrigger');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#ad-hoc-settings-HfbSBuHpbaZGzh4zFs8B');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP682WYexR5a3Jx');
+  await page.click('#SWsQIKjP68

@@ -1,0 +1,21 @@
+test('Exportieren', async ({ page }) => {
+  await page.click('#ad-hoc-settings-LO8EpTw_Rr6ParizyY3AtQ');
+  await page.click('#WEEzFtXvqpxrX8zQNI6Xn');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJiO9FOS4R9');
+  await page.click('#JQTMxLOrVAGJ
