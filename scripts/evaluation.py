@@ -8,7 +8,7 @@ from src.utils.helpers import parse_args, parse_config
 
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
+logger = setup_logger(__name__, level="INFO")  # Change to DEBUG for more verbosity
 
 
 def evaluate_test_cases(cfg: dict) -> pd.DataFrame:
@@ -55,6 +55,7 @@ def evaluate_test_cases(cfg: dict) -> pd.DataFrame:
     df = pd.DataFrame(test_ids, columns=["file_id"])
     df["test_case"] = [f"{test_id.split('_')[0]}" for test_id in test_ids]
     df["test_step"] = [f"{test_id.split('_')[1]}" for test_id in test_ids]
+    df["prediction_dir"] = [pred_dir] * len(test_ids)
     for metric in scores.keys():
         df[metric] = scores[metric]
 

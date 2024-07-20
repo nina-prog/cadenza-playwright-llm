@@ -10,11 +10,11 @@ import torchvision.transforms as transforms
 from PIL import Image
 from torchvision import models, transforms
 from torch.nn.functional import cosine_similarity
-
+from torchvision.models import ResNet18_Weights
 
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
+logger = setup_logger(__name__, level="INFO")  # Change to DEBUG for more verbosity
 
 
 def aggregate_scores(scores: Dict[str, List[Union[float, int, None]]]) -> Dict[str, Union[float, None]]:
@@ -61,6 +61,7 @@ def aggregate_scores(scores: Dict[str, List[Union[float, int, None]]]) -> Dict[s
 
     return agg_scores
 
+
 def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None) -> dict:
     """Calculate scores for given metrics across multiple test cases.
 
@@ -73,7 +74,7 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
     if metrics is None:
         metrics = ['weighted bleu', 'success rate', 'levenshtein distance', "similarity"]
     scores = {metric: [] for metric in metrics}
-    
+
     for test_case in test_cases:
         test = test_case.get('test_case', '')
         test_step = test_case.get('test_step', '')
@@ -81,7 +82,7 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
         validation_code = test_case.get('validation_code', '')
         precondition_code = test_case.get('precondition_code', '')
 
-        image_folder_pred  = os.path.normpath(config['paths']['eval_run_dir'])
+        image_folder_pred = os.path.normpath(config['paths']['eval_run_dir'])
         image_folder_gt = os.path.normpath(config['paths']['gt_images'])
         logger.debug(f"Calculating scores for test case {test}_{test_step}...")
 
@@ -98,29 +99,27 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
                             calculate_success_rate(generated_code, file_name=file_name, config=config)
                         )
                     case 'similarity':
-
-                        #file_name_png = file_name.split(".")[0]  # remove .spec.ts
-                        screenshot_path_pred = os.path.join(image_folder_pred, f"{file_name.split(".")[0]}.png")
+                        file_name = test + "_" + test_step
+                        screenshot_path_pred = os.path.join(image_folder_pred, f"{file_name}.png")
                         screenshot_path_gt = os.path.join(image_folder_gt, f"{file_name}.png")
-                    
-                        model = getattr(models, "resnet18")(pretrained=True)
-                        model.eval()
-                        if not os.path.exists(screenshot_path_gt):
-                            scores[metric].append(
-                            0
-                            )
-                        else:
 
+                        model = models.resnet18(weights=ResNet18_Weights.DEFAULT)
+                        model.eval()
+
+                        if not os.path.exists(screenshot_path_gt):
+                            scores[metric].append(0)
+                        else:
                             # Define your preprocessing steps here
                             preprocess = transforms.Compose([
                                 transforms.Resize((224, 224)),  # Resize the images to the size expected by the model
                                 transforms.ToTensor(),  # Convert the image to a PyTorch tensor
-                                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),  # Normalize the tensor
-    ])
+                                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                                # Normalize the tensor
+                            ])
                             scores[metric].append(
-                                encode_and_calculate_similarity(screenshot_path_pred, screenshot_path_gt,model=model, preprocess=preprocess)
+                                encode_and_calculate_similarity(screenshot_path_pred, screenshot_path_gt, model=model,
+                                                                preprocess=preprocess)
                             )
-
                     case 'levenshtein distance':
                         scores[metric].append(
                             calculate_levenshtein_distance(generated_code, validation_code)
@@ -131,9 +130,8 @@ def calculate_scores(test_cases: List[dict], config: dict, metrics: list = None)
             except Exception as e:
                 scores[metric].append(None)
                 logger.error(f"Error calculating {metric} for test case {test}_{test_step}: {e}")
-
-
     return scores
+
 
 def encode_and_calculate_similarity(pred_img_path, gt_img_path, model, preprocess):
     # Check if the prediction image path exists
@@ -204,7 +202,7 @@ def calculate_success_rate(generated_code: str, file_name: str, config: dict):
         # Normalize paths
         eval_run_dir = os.path.normpath(config['paths']['eval_run_dir'])
         screen_shot_dir = os.path.join(eval_run_dir, 'screenshots')
-        print(screen_shot_dir)
+
         # Logging paths and current working directory
         logger.debug(f"Current working directory: {os.getcwd()}")
         logger.debug(f"Screenshot directory: {screen_shot_dir}")
@@ -295,7 +293,6 @@ def calculate_success_rate(generated_code: str, file_name: str, config: dict):
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         return 0
-    
 
 
 def calculate_levenshtein_distance(generated_code, validation_code):
