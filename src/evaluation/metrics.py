@@ -1,6 +1,7 @@
 from typing import Union, List
 from typing import Dict, List, Union
 import time
+import tempfile
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from Levenshtein import distance
 import esprima
@@ -11,10 +12,11 @@ from PIL import Image
 from torchvision import models, transforms
 from torch.nn.functional import cosine_similarity
 from torchvision.models import ResNet18_Weights
+from src.utils.helpers import tokenize_code
 
 from src.utils.logger import setup_logger
 
-logger = setup_logger(__name__, level="INFO")  # Change to DEBUG for more verbosity
+logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
 
 
 def aggregate_scores(scores: Dict[str, List[Union[float, int, None]]]) -> Dict[str, Union[float, None]]:
@@ -164,14 +166,20 @@ def calculate_weighted_bleu_score(generated_code: str, validation_code: str, pre
     :param alpha: The weight of the second part of the BLEU score.
     :return: The BLEU score of the given generated code.
     """
-    generated_code_tokens = esprima.tokenize(generated_code)
-    validation_code_tokens = esprima.tokenize(validation_code)
-    precondition_code_tokens = esprima.tokenize(precondition_code)
+    generated_code_tokens, gen_error = tokenize_code(generated_code)
+    validation_code_tokens, val_error = tokenize_code(validation_code)
+    precondition_code_tokens, pre_error = tokenize_code(precondition_code)
 
-    # Convert tokens to string
-    generated_code_tokens = [str(elem) for elem in generated_code_tokens]
-    validation_code_tokens = [str(elem) for elem in validation_code_tokens]
-    precondition_code_tokens = [str(elem) for elem in precondition_code_tokens]
+    if gen_error:
+        logger.warning(f"Incomplete generated code detected: {gen_error}")
+    if val_error:
+        logger.warning(f"Incomplete validation code detected: {val_error}")
+    if pre_error:
+        logger.warning(f"Incomplete precondition code detected: {pre_error}")
+
+    if not generated_code_tokens or not validation_code_tokens or not precondition_code_tokens:
+        logger.warning("One or more token lists are empty, unable to calculate BLEU score. Skipping...")
+        return 0.0
 
     precondition_code_length = len(precondition_code_tokens)
     precondition_code_length_without_end_lines = -1
@@ -200,94 +208,58 @@ def calculate_success_rate(generated_code: str, file_name: str, config: dict):
     """Returns the success rate of the given generated code."""
     try:
         # Normalize paths
-        eval_run_dir = os.path.normpath(config['paths']['eval_run_dir'])
-        screen_shot_dir = os.path.join(eval_run_dir, 'screenshots')
+        #eval_run_dir = os.path.normpath(config['paths']['eval_run_dir'])
+        #screen_shot_dir = os.path.join(eval_run_dir, 'screenshots')
+        pred_dir = os.path.normpath(config['paths']['prediction_dir'])
 
-        # Logging paths and current working directory
-        logger.debug(f"Current working directory: {os.getcwd()}")
-        logger.debug(f"Screenshot directory: {screen_shot_dir}")
-        logger.debug(f"Evaluation run directory: {eval_run_dir}")
+        # Configuration template with a placeholder for testDir
+        config_template = """
+        import {{ defineConfig }} from '@playwright/test';
 
-        # Create directories for screenshots
-        os.makedirs(screen_shot_dir, exist_ok=True)
-        file_name_png = file_name.split(".")[0]  # remove .spec.ts
-        screenshot_path = os.path.join(screen_shot_dir, f"{file_name_png}.png")
-        # Replace backslashes with forward slashes
-        screenshot_path = screenshot_path.replace("\\", "/")
-        logger.debug(f"Screenshot path: {screenshot_path}")
+        export default defineConfig({{
+          testDir: '{test_dir}',
+          use: {{
+            headless: true,
+            screenshot: 'only-on-failure',
+            timeout: 30000,
+            reporter: [['list'], ['json']],
+          }},
+        }});
+        """
 
-        screenshot_code = f"  await page.screenshot({{ path: '{screenshot_path}' }});\n"
-        time_out = 30000
-        time_out_code = f"  test.setTimeout({time_out});\n"
+        # Create a temporary Playwright configuration file
+        temp_config_content = config_template.format(test_dir=pred_dir)
+        temp_config_path = tempfile.mktemp(suffix=".ts")
+        with open(temp_config_path, "w") as temp_config_file:
+            temp_config_file.write(temp_config_content)
 
-        generated_code = generated_code.split("\n")
-
-        #### insert screenshot code
-        # Find the position to insert the screenshot command
-        assert type(generated_code) == type([])
-        insert_position = 0
-        for i, line in enumerate(generated_code):
-            if 'async' in line and 'test(' in line:
-                insert_position = i + 1
-                break
-
-        # Insert the timeout code and screenshot command
-        generated_code.insert(insert_position, time_out_code)
-        found_position = 0
-        last_await_position = 0
-        for i, line in enumerate(generated_code):
-            if "await page.close()" in line or "await context.close()" in line or "await browser.close()" in line:
-                found_position = 1
-                insert_position = i
-                break
-            if "await" in line:
-                last_await_position = i + 1  # position after the last "await" line
-
-        if found_position == 0:
-            insert_position = last_await_position
-
-        # Insert the screenshot and HTML extraction commands
-        generated_code.insert(insert_position, screenshot_code)
-        ####
-
-        # Ensure the directory for the temp_path exists
-        temp_dir = os.path.join(eval_run_dir, "test_script")
-        os.makedirs(temp_dir, exist_ok=True)
-        logger.debug(f"Created temp directory: {temp_dir}")
-
-        temp_path = os.path.join(temp_dir, file_name)
-        logger.debug(f"Temp file path: {temp_path}")
-
-        # Save updated test code to a temporary file
+        # Run the Playwright tests
         try:
-            with open(temp_path, 'w', encoding="utf-8") as file:
-                file.write("\n".join(generated_code))
-            logger.debug(f"File {temp_path} created successfully.")
-        except Exception as e:
-            logger.error(f"Failed to create the file {temp_path}. Error: {e}")
-            return 0
+            logger.debug(f"Running Playwright test for {file_name}...")
+            os.system(f"npx playwright test {file_name} --config=config/playwright.config.ts")
+            # Check if the test passed
+            if os.path.exists("test-results/.last-run.json"):
+                with open("test-results/.last-run.json", "r") as file:
+                    test_results = file.read()
+                    if "passed" in test_results:
+                        score = 1
+                        logger.debug(f"Test {file_name} passed. Score: {score}")
+                    else:
+                        score = 0
+                        logger.debug(f"Test {file_name} failed. Score: {score}")
+            else:
+                score = 0
+                logger.debug(f"Test {file_name} failed. Score: {score}")
 
-        # Small delay to account for file system delays
-        time.sleep(1)
-
-        # Run the Playwright test
-        try:
-            logger.debug(f"Current working directory: {os.getcwd()}")
-            result = os.system(f"npx playwright test {temp_path} --config=config/playwright.config.ts")
-            score = 1 if result == 1 else 0
         except Exception as e:
             logger.error(f"Failed to run Playwright test. Error: {e}")
-            return 0
+            score = 0
 
-        # Delete temp file after test run if defined in config
-        if config.get('evaluation', {}).get('delete_temp_files', False):
-            try:
-                os.remove(temp_path)
-                logger.debug(f"Deleted temp file {temp_path}.")
-            except Exception as e:
-                logger.error(f"Failed to delete temp file {temp_path}. Error: {e}")
+        finally:
+            # Clean up the temporary config file
+            if os.path.exists(temp_config_path):
+                os.remove(temp_config_path)
 
-        logger.debug(f"Playwright test result: {result}")
         return score
 
     except Exception as e:
