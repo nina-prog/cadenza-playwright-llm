@@ -1,6 +1,8 @@
 # Cadenza-Playwright-LLM
 This repository provides tools for automated UI test generation for the Disy Cadenza web app using Playwright and local language models (LLM). It demonstrates leveraging LLMs to create robust and maintainable UI test suites, enhancing the efficiency and quality of the testing process. This is part of the "Praktikum: Smart Data Analytics" SS24 at KIT (Karlsruher Institute of Technology).
 
+As a summary of the project, we summarized the processing steps in 2 notebooks in the ```notebooks/summary notebooks/```directory. There we define our approaches and also reference the scripts that were used for the respective steps. More detailed information can be found in the respective scripts in the ```src/``` directory and also more explanations in the notebooks in the specific notebooks for each topic.
+
 ## Group Members 👤 
 | Forename  | Surname | Matr.#  |
 |-----------|---------|---------|
@@ -18,7 +20,7 @@ This repository provides tools for automated UI test generation for the Disy Cad
 ├── 📂 config/                                ← Configuration files for the project.
 │   ├── 📄 config.yaml                        ← Configuration file with all necessary parameters.
 │   ├── 📄 config_with_german_template.yaml   ← Configuration with german settings
-│   └── 📄 playwright config.ts               ← Playwright configuration
+│   └── 📄 playwright config.ts               ← Default Playwright configuration. For text execution tmp configs are created.
 ├── 📂 data/                                  ← Data used for the project.
 │   ├── 📂 external/                          ← External data sources.
 │   ├── 📂 finetuning/                        ← Data used for finetuning.
@@ -66,8 +68,8 @@ This repository provides tools for automated UI test generation for the Disy Cad
 │   │   └── 📄 __init__.py                    ← Initialize the src package.
 ├── 📄 .gitignore                             ← Files and directories to be ignored by git.
 ├── 📄 .pre-commit-config.yaml                ← Configuration file for pre-commit hooks.
-├── 📄 main.py                                ← 
-├── 📄 requirements.in                        ← Requirements file for the project.
+├── 📄 main.py                                ← Main script for running a model prediction.
+├── 📄 requirements.txt                       ← Requirements file for the project.
 ├── 📂 .github/                               ← GitHub Actions configuration files.
 │   └── 📂 workflows/                         ← Directory for GitHub Actions workflows.
 │       └── 📄 ci.yml                         ← Continuous Integration workflow.
@@ -111,5 +113,3 @@ jupyter notebook # or open them via IDE (e.g. VSCode or PyCharm)
 
 # References
 - - - 
-
-
