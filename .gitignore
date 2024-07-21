@@ -4,6 +4,7 @@ screenshot/
 test_script/
 pred_test_script/
 *.zip
+prediction/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
