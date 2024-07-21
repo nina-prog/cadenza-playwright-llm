@@ -4,6 +4,7 @@ import re
 from src.data.data_loading import load_config
 
 from src.utils.logger import setup_logger
+import esprima
 
 logger = setup_logger(__name__, level="DEBUG")  # Change to DEBUG for more verbosity
 
@@ -110,3 +111,23 @@ def get_previous_id(id: str) -> str:
     except ValueError:
         logger.error(f"Invalid ID format: {id}")
         return ""
+
+
+def tokenize_code(code: str):
+    """ Attempt to tokenize code and return tokens up to the first error.
+
+    :param code: The code to tokenize.
+    :return: A list of tokens and the error that occurred, if any.
+    """
+    try:
+        tokens = esprima.tokenize(code)
+        return [str(token) for token in tokens], None
+    except Exception as e:
+        partial_tokens = []
+        code_lines = code.split('\n')
+        for line in code_lines:
+            try:
+                partial_tokens.extend([str(token) for token in esprima.tokenize(line)])
+            except Exception:
+                break
+        return partial_tokens, e
