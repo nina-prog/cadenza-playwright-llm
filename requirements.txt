@@ -1,0 +1,16 @@
+beautifulsoup4==4.12.3
+colorlog==6.8.2
+esprima==4.0.1
+LLaVA==0.0.1.dev0
+nltk==3.8.1
+numpy==2.0.0
+pandas==2.2.2
+Pillow==10.4.0
+pytesseract==0.3.13
+python_Levenshtein==0.25.1
+PyYAML==6.0.1
+PyYAML==6.0.1
+Requests==2.32.3
+torch==2.3.1
+torchvision==0.18.1
+transformers==4.41.2
